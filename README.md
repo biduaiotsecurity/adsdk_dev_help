@@ -51,7 +51,7 @@ dependencies {
 
 ## 参数设置（可选，推荐填写）
 下面在AdWrapper中，可通过`AdWrapper.Instance.XXX`访问
-```javascript { .theme-peacock }
+```ruby
     /**
      * @param mediaId : 可选，媒体id，要自己保证唯一性。64位以内，仅英文或数字
      * 如果填入这个mediaId,那么设备唯一性就用这个代替mac地址，并且需要联系聚屏备案。
