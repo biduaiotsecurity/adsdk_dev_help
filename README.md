@@ -18,7 +18,7 @@ allprojects {
 
 
 在app的gradle下加入：
-```javascript { .theme-peacock }
+```c
 repositories {
     flatDir {
         dirs 'libs'
