@@ -22,7 +22,7 @@ repositories {
     }
 }
 dependencies {
-	// 广告sdk
+    // 广告sdk
     implementation (name: 'adsdk_release_vxxx', ext: 'aar')
     // kotlin基础库
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.31"
@@ -38,7 +38,7 @@ dependencies {
 ## 初始化(必须）
 建议在Application的onCreate中初始化。
 ```javascript { .theme-peacock }
-	@Override
+    @Override
     public void onCreate() {
         super.onCreate();
         // 填入聚屏分配的appid
@@ -89,8 +89,8 @@ PS：keytool工具为JDK里自带。可在jdk\bin或者jdk\jre\bin目录下找�
 需要在第一个activity里申请权限。
 
 ```javascript { .theme-peacock }
-	if (Build.VERSION.SDK_INT > 23) {
-            requestPermissions(new String[]{"android.permission.READ_PHONE_STATE",
+    if (Build.VERSION.SDK_INT > 23) {
+        requestPermissions(new String[]{"android.permission.READ_PHONE_STATE",
                     "android.permission.ACCESS_FINE_LOCATION"}, 101);
     }
 ```
