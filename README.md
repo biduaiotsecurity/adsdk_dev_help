@@ -29,11 +29,14 @@ dependencies {
     implementation (name: 'adsdk_release_vxxx', ext: 'aar')
     // kotlin基础库
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.31"
-    implementation 'com.baidu.adsdk:saferequest:1.0.0.6'
+    implementation 'com.baidu.adsdk:saferequest:1.0.0.8'
     // 视频播放器
     implementation 'com.google.android.exoplayer:exoplayer-core:2.10.1'
     // protobuf
     implementation 'com.google.protobuf:protobuf-lite:3.0.0'
+    // okhttp
+    releaseImplementation 'com.squareup.okio:okio:1.13.0'
+    releaseImplementation 'com.squareup.okhttp3:okhttp:3.9.0'
 }
 ```
 
