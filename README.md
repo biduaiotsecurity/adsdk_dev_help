@@ -47,21 +47,19 @@ dependencies {
 @Override
 public void onCreate() {
     super.onCreate();
-    // 填入聚屏分配的appid
-    AdWrapper.INSTANCE.init(this, "JcFrL3y");
+ /** 
+ * @param appSid : 填入聚屏分配的appSid
+ * @param mediaId : 可选，媒体id，要自己保证唯一性。64位以内，仅英文或数字
+ * 如果填入这个mediaId,那么设备唯一性就用这个代替mac地址，并且需要联系聚屏备案。
+ * 如果不填，SDK将自动获取mac
+ */
+    AdWrapper.INSTANCE.init(this, "JcFrL3y", "mediaId");
 }
 ```
 
 ## 参数设置（可选，推荐填写）
 下面在AdWrapper中，可通过`AdWrapper.Instance.XXX`访问
 ```ruby
-/**
- * @param mediaId : 可选，媒体id，要自己保证唯一性。64位以内，仅英文或数字
- * 如果填入这个mediaId,那么设备唯一性就用这个代替mac地址，并且需要联系聚屏备案。
- * 如果不填，SDK将自动获取mac
- */
-fun setMediaId(mediaId: String)
-
 /**
  * @param screenSize : 填入设备的尺寸，不是像素，是宽高，单位用英寸
  */
