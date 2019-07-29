@@ -44,40 +44,40 @@ dependencies {
 ## 初始化(必须）
 建议在Application的onCreate中初始化。
 ```javascript { .theme-peacock }
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        // 填入聚屏分配的appid
-        AdWrapper.INSTANCE.init(this, "JcFrL3y");
-    }
+@Override
+public void onCreate() {
+    super.onCreate();
+    // 填入聚屏分配的appid
+    AdWrapper.INSTANCE.init(this, "JcFrL3y");
+}
 ```
 
 ## 参数设置（可选，推荐填写）
 下面在AdWrapper中，可通过`AdWrapper.Instance.XXX`访问
 ```ruby
-    /**
-     * @param mediaId : 可选，媒体id，要自己保证唯一性。64位以内，仅英文或数字
-     * 如果填入这个mediaId,那么设备唯一性就用这个代替mac地址，并且需要联系聚屏备案。
-     * 如果不填，SDK将自动获取mac
-     */
-    fun setMediaId(mediaId: String)
-    
-    /**
-     * @param screenSize : 填入设备的尺寸，不是像素，是宽高，单位用英寸
-     */
-    fun setScreenSize(screenSize: PointF)
-    
-    /**
-     * @param isAIO : 是否是一体机。比如手机就是个一体机，智能电视也是一体机，电视盒子就不是一体机。
-     */
-    fun setIsAIO(isAIO: Boolean)
-    
-    /**
-     * 传递请求时刻5s内探测到的强度TOP5的mac
-     * 仅传递安卓设备的mac，过滤掉iOS及其他设备
-     * 如选择填写, 如果填写就会利用此类信息触发广告,能获取到尽量传，可以传了可以触发更多的广告
-     */
-    fun setProbInfo(infos: Map<String, Int>)
+/**
+ * @param mediaId : 可选，媒体id，要自己保证唯一性。64位以内，仅英文或数字
+ * 如果填入这个mediaId,那么设备唯一性就用这个代替mac地址，并且需要联系聚屏备案。
+ * 如果不填，SDK将自动获取mac
+ */
+fun setMediaId(mediaId: String)
+
+/**
+ * @param screenSize : 填入设备的尺寸，不是像素，是宽高，单位用英寸
+ */
+fun setScreenSize(screenSize: PointF)
+
+/**
+ * @param isAIO : 是否是一体机。比如手机就是个一体机，智能电视也是一体机，电视盒子就不是一体机。
+ */
+fun setIsAIO(isAIO: Boolean)
+
+/**
+ * 传递请求时刻5s内探测到的强度TOP5的mac
+ * 仅传递安卓设备的mac，过滤掉iOS及其他设备
+ * 如选择填写, 如果填写就会利用此类信息触发广告,能获取到尽量传，可以传了可以触发更多的广告
+ */
+fun setProbInfo(infos: Map<String, Int>)
 ```
 
 ## 身份校验（必须）
@@ -89,7 +89,6 @@ dependencies {
 `keytool -printcert -file CERT.RSA`
 签名后从APK解压出来则可以看到此文件，文件放于在META-INF文件夹。
 PS：keytool工具为JDK里自带。可在jdk\bin或者jdk\jre\bin目录下找到。
-![图片](http://agroup-bos.cdn.bcebos.com/f38e324dc13567d3bf6761e8952f9ff5340c8f6c)
 ## 权限（必须）
 如果APP的apilevel>=23 也就是 Android版本>=6.0。
 需要在第一个activity里申请权限。
