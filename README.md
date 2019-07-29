@@ -94,10 +94,10 @@ PS：keytool工具为JDK里自带。可在jdk\bin或者jdk\jre\bin目录下找�
 需要在第一个activity里申请权限。
 
 ```javascript { .theme-peacock }
-    if (Build.VERSION.SDK_INT > 23) {
-        requestPermissions(new String[]{"android.permission.READ_PHONE_STATE",
-                    "android.permission.ACCESS_FINE_LOCATION"}, 101);
-    }
+if (Build.VERSION.SDK_INT > 23) {
+    requestPermissions(new String[]{"android.permission.READ_PHONE_STATE",
+                "android.permission.ACCESS_FINE_LOCATION"}, 101);
+}
 ```
 
 如果你的应用程序满足以下两个任意条件，可以忽略此步骤。
