@@ -49,11 +49,12 @@ public void onCreate() {
     super.onCreate();
  /** 
  * @param appSid : 填入聚屏分配的appSid
+ * @param channel : 填入聚屏分配的channel
  * @param mediaId : 可选，媒体id，要自己保证唯一性。64位以内，仅英文或数字
  * 如果填入这个mediaId,那么设备唯一性就用这个代替mac地址，并且需要联系聚屏备案。
  * 如果不填，SDK将自动获取mac
  */
-    AdWrapper.INSTANCE.init(this, "JcFrL3y", "mediaId");
+    AdWrapper.INSTANCE.init(this, "JcFrL3y", "channel"， "mediaId");
 }
 ```
 
