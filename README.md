@@ -92,6 +92,7 @@ fun setProbInfo(infos: Map<String, Int>)
 `keytool -printcert -file CERT.RSA`
 签名后从APK解压出来则可以看到此文件，文件放于在META-INF文件夹。
 PS：keytool工具为JDK里自带。可在jdk\bin或者jdk\jre\bin目录下找到。
+如果有debug运行需求，可以把debug版的签名一并给到我们（一般一台机器一个debug签名，可以按需求加）
 ## 权限（必须）
 如果APP的apilevel>=23 也就是 Android版本>=6.0。
 需要在第一个activity里申请权限。
