@@ -31,7 +31,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.31"
     implementation 'com.baidu.adsdk:saferequest:1.0.0.8'
     // 视频播放器
-    implementation 'com.google.android.exoplayer:exoplayer-core:2.10.1'
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.10.3'
     // protobuf
     implementation 'com.google.protobuf:protobuf-lite:3.0.0'
     // okhttp
