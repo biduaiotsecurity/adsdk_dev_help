@@ -38,6 +38,10 @@ dependencies {
     releaseImplementation 'com.squareup.okio:okio:1.13.0'
     releaseImplementation 'com.squareup.okhttp3:okhttp:3.9.0'
 }
+//加入java 8支持
+compileOptions {
+  targetCompatibility JavaVersion.VERSION_1_8
+}
 ```
 
 
