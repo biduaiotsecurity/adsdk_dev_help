@@ -115,7 +115,7 @@ if (Build.VERSION.SDK_INT > 23) {
 * 设备系统小于Android 6.0。
 
 ## 使用广告组件
-目前提供以下两种接入方式。
+目前提供以下两种接入方式。（如果标记为auto=true，就不能再自己代码控制activity了,内部将会自动根据设置来进行轮播)
 ### xml 布局接入，简单，**推荐**
 在Activity/Fragment的layout中像普通view一样布局。
 其中公共属性如下：
