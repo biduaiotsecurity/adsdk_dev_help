@@ -35,8 +35,8 @@ dependencies {
     // protobuf
     implementation 'com.google.protobuf:protobuf-lite:3.0.0'
     // okhttp
-    releaseImplementation 'com.squareup.okio:okio:1.13.0'
-    releaseImplementation 'com.squareup.okhttp3:okhttp:3.9.0'
+    implementation 'com.squareup.okio:okio:1.13.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.9.0'
 }
 //加入java 8支持
 compileOptions {
