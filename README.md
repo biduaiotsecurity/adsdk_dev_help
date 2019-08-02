@@ -115,7 +115,7 @@ if (Build.VERSION.SDK_INT > 23) {
 * 设备系统小于Android 6.0。
 
 ## 使用广告组件
-目前提供以下两种接入方式。（如果标记为auto=true，就不能再自己代码控制activity了,内部将会自动根据设置来进行轮播)
+目前提供以下两种接入方式。（注意，对同一个广告组建，要么使用自动方式，要么使用手动方式，在自动模式下如果标记为auto=true，内部将会自动根据设置来进行轮播，此时不需要外部进行控制。)
 ### xml 布局接入，简单，**推荐**
 在Activity/Fragment的layout中像普通view一样布局。
 其中公共属性如下：
@@ -198,6 +198,13 @@ public class VideoViewManualActivity extends Activity implements IAdListener {
     public void onAdDismissed() {}
 }
 ```
+
+监听接口的具体含义如下：
+onAdPrepared  已经下载好了，但是还没有开始播放。此时可以通过controller调用showAd
+onAdStart  已经开始播放了。（是一个时间点）
+onAdFailed和onAdFinish平行，要么成功完成，要么失败
+onAdClick点击广告时回调
+onAdDismissed比如按了home键或者其他activtiy在这个View上面，这个方法就会被回调
 
 
 ## 附录
