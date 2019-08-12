@@ -51,13 +51,14 @@ compileOptions {
 @Override
 public void onCreate() {
     super.onCreate();
-    /** 
-    * @param appSid : 填入聚屏分配的appSid
-    * @param channel : 填入聚屏分配的channel
-    * @param mediaId : 可选，媒体id，要自己保证唯一性。64位以内，仅英文或数字
-    * 如果填入这个mediaId,那么设备唯一性就用这个代替mac地址，并且需要联系聚屏备案。
-    * 如果不填，填写null，SDK将自动获取mac
-    */
+    /**
+     * @param appSid : 填入聚屏分配的appSid
+     * @param channel : 填入聚屏分配的channel
+     * @param mediaId :
+     * 1. 如果广告位类型是户外，必须填写mediaid（64位以内，仅英文或数字或下划线_）, 需要自己保证设备唯一性。
+     * 另外，这个mediaid需要在聚屏方注册。
+     * 2. 如果你的广告位类型是ott或者开屏广告，则可以不填写mediaid（填写为null）,sdk将会自动获取mac进行请求。
+     */
     AdWrapper.INSTANCE.init(this, "JcFrL3y", "channel"， "mediaId");
 }
 ```
@@ -171,7 +172,7 @@ public class VideoViewManualActivity extends Activity implements IAdListener {
 
     @Override
     // 广告准备完毕
-    public void onAdPrepared() {
+    fun onAdPrepared(info: PreparedInfo) {
         controller.showAd();
     }
 
@@ -180,8 +181,9 @@ public class VideoViewManualActivity extends Activity implements IAdListener {
     public void onAdStart() {}
 
     @Override
-    // 广告播放失败，msg是失败原因,详见下面附录中的错误列表
-    public void onAdFailed( String msg) {}
+    // 广告播放失败，int是错误码，可以反馈给我们
+    //msg是失败原因,详见下面附录中的错误列表
+    fun onAdFailed(ec: Int, msg: String) {}
 
     @Override
     // 广告被点击
@@ -200,7 +202,7 @@ public class VideoViewManualActivity extends Activity implements IAdListener {
 ```
 
 监听接口的具体含义如下：
-onAdPrepared  已经下载好了，但是还没有开始播放。此时可以通过controller调用showAd
+onAdPrepared  已经下载好了，但是还没有开始播放。preparedinfo里面有广告请求的唯一标识符与广告位id，此时可以通过controller调用showAd
 onAdStart  已经开始播放了。（是一个时间点）
 onAdFailed和onAdFinish平行，要么成功完成，要么失败
 onAdClick点击广告时回调
