@@ -229,4 +229,10 @@ onAdDismissed比如按了home键或者其他activtiy在这个View上面，这个
 "media_file_not_fount"
 "get_media_connection_error"
 "media_play_unknown_error"
+
+校验错误码：
+retCode 为 0x01 包名或者md5不匹配
+	   0x02 请求格式不正确或者参数错误
+	   0x03 解密失败
+	   0x04 鉴权失败
 ```
