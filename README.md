@@ -196,7 +196,7 @@ public class VideoViewManualActivity extends Activity implements IAdListener {
 
     @Override
     // 广告准备完毕
-    fun onAdPrepared(info: PreparedInfo) {
+    fun onAdPrepared(info: RequestInfo) {
         controller.showAd();
     }
 
@@ -207,7 +207,7 @@ public class VideoViewManualActivity extends Activity implements IAdListener {
     @Override
     // 广告播放失败，int是错误码，可以反馈给我们
     //msg是失败原因,详见下面附录中的错误列表
-    fun onAdFailed(ec: Int, msg: String) {}
+    fun onAdFailed(info : RequestInfo, ec: Int, msg: String) {}
 
     @Override
     // 广告被点击
