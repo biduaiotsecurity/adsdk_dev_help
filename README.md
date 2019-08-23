@@ -172,58 +172,159 @@ if (Build.VERSION.SDK_INT > 23) {
 
 ### 代码布局，媒体方自己通过代码控制广告请求与播放
 ```javascript { .theme-peacock }
-public class VideoViewManualActivity extends Activity implements IAdListener {
+/**
+ * 自己控制广告流
+ */
+public class ManualActivity extends AppCompatActivity {
 
+    Handler handler = new Handler();
+
+    /**
+     * 视频广告组件
+     */
     BDVideoView videoView;
-    IController controller;
+    /**
+     * 视频广告控制器
+     */
+    IController videoController;
+
+    /**
+     * 图片广告组件
+     */
+    BDGalleryView galleryView;
+    /**
+     * 图片广告控制器
+     */
+    IController galController;
+
+    /**
+     * 图片广告组件监听器
+     */
+    private GalListener galListener = new GalListener();
+
+    /**
+     * 视频广告组件监听器
+     */
+    private VideoListener videoListener = new VideoListener();
+
+    class VideoListener extends DefaultAdListener {
+        @Override
+        public void onAdPrepared(@NotNull RequestInfo info) {
+            // 收到视频广告准备OK的时候，可以自己做些业务逻辑，
+            // 这个例子是将图片组件隐藏，显示视频组件，然后调用showAd接口
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    videoView.setVisibility(View.VISIBLE);
+                    galleryView.setVisibility(View.INVISIBLE);
+                }
+            });
+
+            videoController.showAd();
+        }
+
+        @Override
+        public void onAdFailed(@NotNull RequestInfo info, int ec, @NotNull String msg) {
+            // 当广告播放失败回调，这个例子在播放视频广告失败的时候继续请求视频广告
+            videoController.loadAdAsync();
+        }
+
+        @Override
+        public void onAdFinish(@NotNull RequestInfo requestInfo) {
+            // 当广告完成时回调，这个例子在播放视频广告播放完成的时候请求图片广告
+            galController.loadAdAsync();
+        }
+    }
+
+    class GalListener extends DefaultAdListener {
+        @Override
+        public void onAdPrepared(@NotNull RequestInfo info) {
+            // 收到图片广告准备OK的时候，可以自己做些业务逻辑，
+            // 这个例子是将视频组件隐藏，显示图片组件，然后调用showAd接口
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    videoView.setVisibility(View.INVISIBLE);
+                    galleryView.setVisibility(View.VISIBLE);
+                }
+            });
+            galController.showAd();
+        }
+
+        @Override
+        public void onAdFailed(@NotNull RequestInfo info, int ec, @NotNull String msg) {
+            // 当图片广告播放失败回调，这个例子在图片广告失败再请求图片广告
+            galController.loadAdAsync();
+        }
+
+        @Override
+        public void onAdFinish(@NotNull RequestInfo requestInfo) {
+            // 当图片广告播放完成回调，这个例子在图片广告播放完成请求视频广告
+            videoController.loadAdAsync();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_manual);
-		
-		// 也可以通过LayoutPramters手动布局。
+
+        // 我们这个例子是再xml中布局视频与图片组件，
+        // 你同样也可以在代码中使用LayoutParams布局
         videoView = findViewById(R.id.bdvv_test);
-        controller = videoView.getController();
-        
-        // 设置slotid,此id需要向聚屏申请
-        controller.setSlotid("Jy0FoE5qy");
-        // 增加监听器
-        controller.addAdListener(this);
-        // 请求广告
-        controller.loadAdAsync();
+        galleryView = findViewById(R.id.bdvv_gal_test);
+
+        // 初始化图片组件，设置监听器
+        galController = galleryView.getController();
+        galController.addAdListener(galListener);
+
+        // 初始化视频组件，设置监听器
+        videoController = videoView.getController();
+        // 你可以通过setSlotid设置广告位id，也可以通过xml中设置
+        videoController.setSlotid("Jy0FoE5qy");
+        videoController.addAdListener(videoListener);
+
+        // 发起视频组件的广告请求
+        videoController.loadAdAsync();
     }
 
-    @Override
-    // 广告准备完毕
-    fun onAdPrepared(info: RequestInfo) {
-        controller.showAd();
+
+    /**
+     * 提供一个骨架方法，业务方不需要重写每个回调时使用。仅为降低代码冗余度
+     */
+    public static class DefaultAdListener implements IAdListener {
+        @Override
+        public void onAdPrepared(@NotNull RequestInfo info) {
+
+        }
+
+        @Override
+        public void onAdStart() {
+
+        }
+
+        @Override
+        public void onAdFailed(@NotNull RequestInfo info, int ec, @NotNull String msg) {
+
+        }
+
+        @Override
+        public void onAdClick() {
+
+        }
+
+        @Override
+        public void onAdFinish(@NotNull RequestInfo info) {
+
+        }
+
+        @Override
+        public void onAdDismissed() {
+
+        }
     }
-
-    @Override
-    // 广告开始播放（时间点）
-    public void onAdStart() {}
-
-    @Override
-    // 广告播放失败，int是错误码，可以反馈给我们
-    //msg是失败原因,详见下面附录中的错误列表
-    fun onAdFailed(info : RequestInfo, ec: Int, msg: String) {}
-
-    @Override
-    // 广告被点击
-    public void onAdClick() {}
-
-    @Override
-    // 正常播放完毕回调
-    public void onAdFinish(info: RequestInfo) {
-    	// 再次请求或者做点别的。
-        controller.loadAdAsync();
-    }
-
-    @Override
-    // 如果当前View被挡住，比如按了home键或者其他activtiy在这个View上面，该方法会被回调
-    public void onAdDismissed() {}
 }
+
 ```
 
 监听接口的具体含义如下：
