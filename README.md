@@ -53,7 +53,7 @@ dependencies {
     implementation (name: 'adsdk_release_vxxx', ext: 'aar')
     // kotlin基础库
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.31"
-    implementation 'com.baidu.adsdk:saferequest:1.0.0.27'
+    implementation 'com.baidu.adsdk:saferequest:1.0.0.28'
     // 视频播放器
     implementation 'com.google.android.exoplayer:exoplayer-core:2.10.3'
     // protobuf
