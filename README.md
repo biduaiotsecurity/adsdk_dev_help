@@ -75,7 +75,7 @@ compileOptions {
 
 
 ## 初始化(必须）
-建议在Application的onCreate中初始化。
+在Application的onCreate中初始化。
 ```javascript { .theme-peacock }
 @Override
 public void onCreate() {
