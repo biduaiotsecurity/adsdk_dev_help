@@ -1,4 +1,4 @@
-# 百度聚屏广告SDK接入文档
+# 百度聚屏广告SDK接入文档V1.1
 
 ## 产品介绍
 百度聚屏广告SDK，集成了高兼容性的广告播放器，支持高清流畅播放mp4、jpg等主流图片/视频广告格式，并集成了百度安全多年积累的安全技术，具备完善的监播机制和能力，可全面保障媒体终端广告播放的流畅性、安全性和真实性。
@@ -51,9 +51,14 @@ repositories {
 dependencies {
     // 广告sdk
     implementation (name: 'adsdk_release_vxxx', ext: 'aar')
+    // 内部库
+    implementation "com.baidu.adsdk:saferequest:1.1.0.33"
+    // glide
+    implementation("com.github.bumptech.glide:glide:4.8.0") {
+        exclude group: 'com.android.support'
+    }
     // kotlin基础库
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.31"
-    implementation 'com.baidu.adsdk:saferequest:1.0.0.28'
     // 视频播放器
     implementation 'com.google.android.exoplayer:exoplayer-core:2.10.3'
     // protobuf
@@ -88,7 +93,7 @@ public void onCreate() {
 ```
 
 ## 参数设置（可选，推荐填写）
-下面在AdWrapper中，可通过`AdWrapper.Instance.XXX`访问
+下面在AdWrapper中，可通过`AdWrapper.Instance.XXX`访问，在init之后调用
 ```ruby
 /**
  * @param screenSize : 填入设备的尺寸，不是像素，是宽高，单位用英寸
@@ -141,6 +146,14 @@ if (Build.VERSION.SDK_INT > 23) {
 
 ## 使用广告组件
 目前提供以下两种接入方式。（注意，对同一个广告组建，要么使用自动方式，要么使用手动方式，在自动模式下如果标记为auto=true，内部将会自动根据设置来进行轮播，此时不需要外部进行控制。)
+另外，必须在使用到组件的activity或fragment里的类静态初始化块中调用onActivityInit接口。
+```
+{
+    // 必须在使用到组件的activity或fragment里的类静态初始化块中调用
+    AdWrapper.INSTANCE.onActivityInit(this);
+}
+```
+
 ### xml 布局接入，简单，**推荐**
 在Activity/Fragment的layout中像普通view一样布局。
 其中公共属性如下：
@@ -148,12 +161,23 @@ if (Build.VERSION.SDK_INT > 23) {
 `auto` 是否是自动播放广告（选填）
 #### 视频组件
 ```javascript { .theme-peacock }
-<com.baidu.adsdk.view.BDVideoView
+// 外部这个laoyou自己决定
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activitys.VideoViewAutoActivity">
+
+    <com.baidu.adsdk.view.BDVideoView
         android:id="@+id/bd_video_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        BDAdView:slotid="Jy0FoE5qy"
-        BDAdView:auto="true" />
+	// 设置是否自动模式，如果这里填false，则必须使用手动代码方式来控制广告请求与播放。
+        app:auto="true"
+	// 设置视频广告位id
+        app:slotid="Jy0FoE5qy" />
+</android.support.constraint.ConstraintLayout>
 ```
 接入后，视频组件将会一直持续播放，并自动请求广告。
 
@@ -161,16 +185,55 @@ if (Build.VERSION.SDK_INT > 23) {
 额外有一个独立的属性：
 `intervalTime`设置x秒换一张图片，设置的时间必须在[5,30]秒中间，如果不在这个范围，默认15秒。
 ```javascript { .theme-peacock }
-<com.baidu.adsdk.view.BDGalleryView
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activitys.GalleryViewActivity">
+
+    <com.baidu.adsdk.view.BDGalleryView
         android:layout_width="match_parent"
-        BDAdView:auto="true"
-        BDAdView:slotid="6660001"
-        BDGalleryView:intervalTime="15"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+	// 设置是否自动模式，如果这里填false，则必须使用手动代码方式来控制广告请求与播放。
+        app:auto="true"
+	// 图片播放时间，单位是s，设置的时间必须在[5,30]秒中间，如果不在这个范围，默认15秒。
+        app:intervalTime="15"
+	// 设置图片广告位id
+        app:slotid="6660001" />
+</LinearLayout>
 ```
 接入后，图片轮播组件将会持续以固定的intervalTime间隔切换广告。
 
+#### 视频图片二合一自动切换轮播组件
+
+```
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activitys.PlayMixMediaActivity">
+
+    <com.baidu.adsdk.view.BDMixMediaPlayView
+        android:layout_width="match_parent"
+	// 图片播放时间，单位是s，设置的时间必须在[5,30]秒中间，如果不在这个范围，默认15秒。
+	app:imagePlayTime="15"
+	// 设置是否自动模式，如果这里填false，则必须使用手动代码方式来控制广告请求与播放。
+        app:playAuto="true"
+	// 图片广告位id
+        app:imageslotid="6660001"
+	// 视频广告位id
+        app:videoslotid="Jy0FoE5qy"
+        android:layout_height="match_parent" />
+</LinearLayout>
+```
+
 ### 代码布局，媒体方自己通过代码控制广告请求与播放
+下面这里例子使用了一个视频组件与一个图片轮播组件，模拟了一种场景：
+播一个视频，播放成功后再播一个图片，再播放一个视频，由此往复循环。
+当然你也可以使用我们提供的mix(二合一组件），里面已经把这个逻辑做好了。
+这个例子主要是演示了几个接口如何使用。
 ```javascript { .theme-peacock }
 /**
  * 自己控制广告流
@@ -178,6 +241,10 @@ if (Build.VERSION.SDK_INT > 23) {
 public class ManualActivity extends AppCompatActivity {
 
     Handler handler = new Handler();
+
+    {
+        AdWrapper.INSTANCE.onActivityInit(this);
+    }
 
     /**
      * 视频广告组件
@@ -212,21 +279,21 @@ public class ManualActivity extends AppCompatActivity {
         public void onAdPrepared(@NotNull RequestInfo info) {
             // 收到视频广告准备OK的时候，可以自己做些业务逻辑，
             // 这个例子是将图片组件隐藏，显示视频组件，然后调用showAd接口
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    videoView.setVisibility(View.VISIBLE);
-                    galleryView.setVisibility(View.INVISIBLE);
-                }
-            });
-
+            videoView.setVisibility(View.VISIBLE);
+            galleryView.setVisibility(View.INVISIBLE);
             videoController.showAd();
         }
 
         @Override
         public void onAdFailed(@NotNull RequestInfo info, int ec, @NotNull String msg) {
             // 当广告播放失败回调，这个例子在播放视频广告失败的时候继续请求视频广告
-            videoController.loadAdAsync();
+	    // 延迟1s，避免快速失败又快速请求刷屏
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    videoController.loadAdAsync();
+                }
+            }, 1000);
         }
 
         @Override
@@ -241,20 +308,21 @@ public class ManualActivity extends AppCompatActivity {
         public void onAdPrepared(@NotNull RequestInfo info) {
             // 收到图片广告准备OK的时候，可以自己做些业务逻辑，
             // 这个例子是将视频组件隐藏，显示图片组件，然后调用showAd接口
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    videoView.setVisibility(View.INVISIBLE);
-                    galleryView.setVisibility(View.VISIBLE);
-                }
-            });
+            videoView.setVisibility(View.INVISIBLE);
+            galleryView.setVisibility(View.VISIBLE);
             galController.showAd();
         }
 
         @Override
         public void onAdFailed(@NotNull RequestInfo info, int ec, @NotNull String msg) {
             // 当图片广告播放失败回调，这个例子在图片广告失败再请求图片广告
-            galController.loadAdAsync();
+	    // 延迟1秒，避免快速失败又快速请求刷屏
+	    handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    galController.loadAdAsync();
+                }
+            }, 1000);
         }
 
         @Override
@@ -327,7 +395,9 @@ public class ManualActivity extends AppCompatActivity {
 
 ```
 
-监听接口的具体含义如下：
+## 回调接口
+
+回调接口的具体含义如下：
 onAdPrepared  已经下载好了，但是还没有开始播放。preparedinfo里面有广告请求的唯一标识符与广告位id，此时可以通过controller调用showAd
 onAdStart  已经开始播放了。（是一个时间点）
 onAdFailed和onAdFinish平行，要么成功完成，要么失败
@@ -343,20 +413,27 @@ onAdDismissed比如按了home键或者其他activtiy在这个View上面，这个
 
 ### 错误列表（持续更新）
 ```javascript { .theme-peacock }
-"illegal argument"
-"time_out"
-"permission_deny"
-"url is empty"
-"md5 doesn't match"
-"not_support_breakpoint"
-"unknown_host_exception"
-"socket_exception"
-"runtimeexception"
-"media_file_not_fount"
-"get_media_connection_error"
-"media_play_unknown_error"
+-1 unknow 大多是网络问题，网络不好的情况
+-2 illegal argument
+-3 time_out 连接超时
+-4 permission_deny
+-5 url is empty
+-6 md5 doesn't match 下载后的文件与云端md5匹配与否
+-7 not_support_breakpoint
+-8 unknown_host_exception
+-9 socket_exception
+-10 runtimeexception
+-11 identity_verification_failed sdk身份校验错误，这个一般是因为app包名与app签名的md5没有入库导致的。
+-15 sslhandshake_exception
+-16 ssl_exception
+-17 timeout_cancellation_exception 这个就是下载物料超时，这一块可以检查下网络
+-101 get_media_connection_error
+-102 media_play_unknown_error
+-103 media_decoder_init_error
+-104 media_play_pause
+-200 surface_no_create
 
-校验错误码：
+SDK身份校验错误码：
 retCode 为 0x01 包名或者md5不匹配
 	   0x02 请求格式不正确或者参数错误
 	   0x03 解密失败
