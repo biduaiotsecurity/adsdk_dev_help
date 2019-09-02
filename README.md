@@ -398,11 +398,12 @@ public class ManualActivity extends AppCompatActivity {
 ## 回调接口
 
 回调接口的具体含义如下：
-onAdPrepared  已经下载好了，但是还没有开始播放。preparedinfo里面有广告请求的唯一标识符与广告位id，此时可以通过controller调用showAd
-onAdStart  已经开始播放了。（是一个时间点）
-onAdFailed和onAdFinish平行，要么成功完成，要么失败
-onAdClick点击广告时回调
-onAdDismissed比如按了home键或者其他activtiy在这个View上面，这个方法就会被回调
+
+* onAdPrepared  已经下载好了，但是还没有开始播放。preparedinfo里面有广告请求的唯一标识符与广告位id，此时可以通过controller调用showAd
+* onAdStart  已经开始播放了。（是一个时间点）
+* onAdFailed和onAdFinish平行，要么成功完成，要么失败
+* onAdClick点击广告时回调
+* onAdDismissed比如按了home键或者其他activtiy在这个View上面，这个方法就会被回调
 
 
 ## 附录
