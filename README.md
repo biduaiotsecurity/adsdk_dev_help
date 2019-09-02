@@ -405,12 +405,13 @@ public class ManualActivity extends AppCompatActivity {
 * onAdClick点击广告时回调
 * onAdDismissed比如按了home键或者其他activtiy在这个View上面，这个方法就会被回调
 
-
-## 附录
-### 限制
+## 限制
 
 * 不允许在播放过程中遮盖、隐藏、调整大小广告组件，否则将会影响收益。
 * 广告组件大小不能小于300*300px， 否则将会影响收益。
+
+## 附录
+
 
 ### 错误列表（持续更新）
 ```javascript { .theme-peacock }
