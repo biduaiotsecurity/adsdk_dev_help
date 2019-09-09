@@ -59,6 +59,7 @@ dependencies {
     }
     // kotlin基础库
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.31"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.2.1'
     // 视频播放器
     implementation 'com.google.android.exoplayer:exoplayer-core:2.10.3'
     // protobuf
