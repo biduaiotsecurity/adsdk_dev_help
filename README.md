@@ -89,7 +89,7 @@ public void onCreate() {
      * 另外，这个mediaid需要在聚屏方注册。
      * 2. 如果你的广告位类型是ott或者开屏广告，则可以不填写mediaid（填写为null）,sdk将会自动获取mac进行请求。
      */
-    AdWrapper.INSTANCE.init(this, "JcFrL3y", "channel"， "mediaId");
+    AdWrapper.INSTANCE.init(this, 聚屏分配的appSid, 渠道， mediaId);
 }
 ```
 
