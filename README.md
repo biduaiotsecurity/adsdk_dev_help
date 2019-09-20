@@ -459,6 +459,7 @@ retCode 为 0x01 包名或者md5不匹配
 |错误码| 定义| 解释|  
 |----|----|----|  
 |100001| MISSING_REQUEST| 请求参数缺失 |  
+
 注：请求数据无法解析，或解析后请求ID缺失/格式异常时。返回http状态码400，无错误码  
 3.2 API 版本信息错误  
 
@@ -467,6 +468,7 @@ retCode 为 0x01 包名或者md5不匹配
 |102000|  MISSING_API_VERSION |使用API 版本信息缺失 |  
 |102010| MISSING_API_VERSION_MAJOR| API API主版本信息缺失 |  
 |102011 |ERROR_API_VERSION |API API版本信息错误 |  
+
 3.3 APP_ID信息错误  
 
 |错误码| 定义| 解释|  
@@ -496,6 +498,7 @@ retCode 为 0x01 包名或者md5不匹配
 |104121| ERROR_UDID_ID_TYPE| 设备唯一标识符类型错误|  
 |104130| MISSING_UDID_ID| 设备唯一标识符ID值缺失|  
 |104140| ERROR_FORMAT_MAC| 设备mac不符合约定格式|   
+
 3.5 网络环境信息错误  
 
 |错误码| 定义| 解释|  
@@ -512,6 +515,7 @@ retCode 为 0x01 包名或者md5不匹配
 |105050| MISSING_RSSI| Wi-Fi 热点信号强度信息缺失|  
 |105060| MISSING_AP_NAME| Wi-Fi 热点名称缺失|  
 |105070| MISSING_AP_CONNECTION| Wi-Fi 连接状态信息缺失|  
+
 3.6 GPS 坐标信息错误  
 
 |错误码| 定义| 解释|  
@@ -521,6 +525,7 @@ retCode 为 0x01 包名或者md5不匹配
 |106010| MISSING_LONGITUDE| 经度信息缺失|  
 |106020| MISSING_LATITUDE| 纬度信息缺失|  
 |106030|  MISSING_GPS_TIMESTAMP| 定位时间戳信息缺失|   
+
 3.7 广告位信息错误    
 
 |错误码| 定义| 解释|  
@@ -530,11 +535,13 @@ retCode 为 0x01 包名或者md5不匹配
 |107003| NOT_MATCH_ADSLOT_ID| 广告位ID与APP_ID不匹配|  
 |107010| MISSING_ADSLOT_SIZE| 广告位尺寸信息缺失|  
 |107040| MISSING_ADSLOT| 广告位信息缺失|  
+
 3.8 其他错误  
 
 |错误码| 定义| 解释|  
 |----|----|----|  
 |400000| FLOW_DROP_BY_TIME_CONTORL| 时段流量丢弃(仅户外、出行)|  
+
 4 响应信息错误  
 4.1 广告请求  
 
