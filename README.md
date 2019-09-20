@@ -453,18 +453,18 @@ retCode 为 0x01 包名或者md5不匹配
  
 3 请求信息错误 
 3.1 请求基础信息错误 
-错误码 定义 解释 
-100001 MISSING_REQUEST 请求参数缺失 
+|错误码| 定义| 解释| 
+|100001| MISSING_REQUEST| 请求参数缺失 |
 注：请求数据无法解析，或解析后请求ID缺失/格式异常时。返回http状态码400，无错误码 
 3.2 API 版本信息错误 
-错误码 定义 解释 
-102000  MISSING_API_VERSION 使用API 版本信息缺失 
-102010 MISSING_API_VERSION_MAJOR API API主版本信息缺失 
-102011 ERROR_API_VERSION API API版本信息错误 
+|错误码| 定义| 解释 |
+|102000|  MISSING_API_VERSION |使用API 版本信息缺失 |
+|102010| MISSING_API_VERSION_MAJOR| API API主版本信息缺失 |
+|102011 |ERROR_API_VERSION |API API版本信息错误 |
 3.3 APP_ID信息错误 
 错误码 定义 解释 
-103010  MISSING_APP_ID APP_ID信息缺失 
-103011 ERROR_APP_ID APP_ID信息错误，MSSP未收录 
+|103010  |MISSING_APP_ID| APP_ID信息缺失 |
+|103011| ERROR_APP_ID| APP_ID信息错误，MSSP未收录 |
  
 3.4 设备信息错误 
 错误码 定义 解释 
