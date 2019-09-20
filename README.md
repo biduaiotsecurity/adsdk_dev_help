@@ -442,113 +442,116 @@ retCode 为 0x01 包名或者md5不匹配
 	   0x03 解密失败
 	   0x04 鉴权失败
 ```
-### 聚屏返回错误对照表
-百度聚屏 API 错误码对照表 （适用于API v6.0及以上版本） 
- 
-1 前言 
-错误码对照表文件作为对API 接口的补充说明，在API 接口升级后，会不定期更新维护。每个错误码对应的 处理方法均为引导性建议，对于具体的错误需要相关技术人员根据具体情况来处理。 对文档中未说明的内容，请咨询百度聚屏。 注：联调前，请媒体技术人员先本地验证proto序列化、反序列化功能正确。proto版本为2.4 
-2 无错误响应 
-错误码 定义 解释 
-0 NO_ERROR 请求处理正确 
- 
-3 请求信息错误 
-3.1 请求基础信息错误 
-|错误码| 定义| 解释| 
-|100001| MISSING_REQUEST| 请求参数缺失 |
-注：请求数据无法解析，或解析后请求ID缺失/格式异常时。返回http状态码400，无错误码 
-3.2 API 版本信息错误 
-|错误码| 定义| 解释 |
-|102000|  MISSING_API_VERSION |使用API 版本信息缺失 |
-|102010| MISSING_API_VERSION_MAJOR| API API主版本信息缺失 |
-|102011 |ERROR_API_VERSION |API API版本信息错误 |
-3.3 APP_ID信息错误 
-错误码 定义 解释 
-|103010  |MISSING_APP_ID| APP_ID信息缺失 |
-|103011| ERROR_APP_ID| APP_ID信息错误，MSSP未收录 |
- 
-3.4 设备信息错误 
-错误码 定义 解释 
-104000 MISSING_DEVICE_INFO 设备信息缺失 
-104010 MISSING_DEVICE_TYPE 设备类型信息缺失 
-104011 ERROR_DEVICE_TYPE 设备类型信息错误 
-104020 MISSING_OS_TYPE 操作系统信息缺失 
-104021 ERROR_OS_TYPE 操作系统信息错误 
-104030 MISSING_OS_VERSION 操作系统版本信息缺失 
-104040 MISSING_OS_VERSION_MAJOR 操作系统主版本信息缺失 
-104050 MISSING_VENDOR 厂商信息缺失 
-104060 MISSING_MODEL 设备型号信息缺失 
-104070 MISSING_UDID 设备唯一标识符缺失 
-104071 ERROR_UDID 设备唯一标识符未备案 
-104090 MISSING_SCREEN_SIZE 设备屏幕尺寸信息缺失 
-104100 MISSING_SCREEN_SIZE_WIDTH 设备屏幕尺寸宽度缺失 
-104110 MISSING_SCREEN_SIZE_HEIGHT 设备屏幕尺寸高度缺失 
-104120 MISSING_UDID_ID_TYPE 设备唯一标识符类型缺失 
-104121 ERROR_UDID_ID_TYPE 设备唯一标识符类型错误 
-104130 MISSING_UDID_ID 设备唯一标识符ID值缺失 
-104140 ERROR_FORMAT_MAC 设备mac不符合约定格式 
-3.5 网络环境信息错误 
-错误码 定义 解释 
-105000 MISSING_NETWORK_INFO 网络环境信息缺失 
-105010 MISSING_IPV4 网络地址信息缺失 
-105011 ERROR_FORMAT_IPV4 网络地址信息格式错误 
-105020 MISSING_CONNECTION_TYPE 网络连接类型缺失 
-105021 ERROR_CONNECTION_TYPE 网络连接类型错误 
-105030 MISSING_OPERATOR_TYPE 网络运营商类型缺失 
-105031 ERROR_OPERATOR_TYPE 网络运营商类型错误 
-105040 MISSING_AP_MAC Wi-Fi 热点地址信息缺失 
-105041 ERROR_FORMAT_AP_MAC Wi-Fi 热点地址信息格式错误 
-105050 MISSING_RSSI Wi-Fi 热点信号强度信息缺失 
-105060 MISSING_AP_NAME Wi-Fi 热点名称缺失 
-105070 MISSING_AP_CONNECTION Wi-Fi 连接状态信息缺失 
-3.6 GPS 坐标信息错误 
-错误码 定义 解释 
-106000 MISSING_COORDINATE_TYPE 坐标类型信息缺失 
-106001 ERROR_COORDINATE_TYPE 坐标类型信息错误 
-106010 MISSING_LONGITUDE 经度信息缺失 
-106020 MISSING_LATITUDE 纬度信息缺失 
-
- 
-106030  MISSING_GPS_TIMESTAMP 定位时间戳信息缺失 
-3.7 广告位信息错误 
-错误码 定义 解释 107000 MISSING_ADSLOT_ID 广告位ID缺失 
-107001 ERROR_ADSLOT_ID 广告位ID未收录 
-107003 NOT_MATCH_ADSLOT_ID 广告位ID与APP_ID不匹配 
-107010 MISSING_ADSLOT_SIZE 广告位尺寸信息缺失 
-107040 MISSING_ADSLOT 广告位信息缺失 
-3.8 其他错误 
-错误码 定义 解释 
-400000 FLOW_DROP_BY_TIME_CONTORL 时段流量丢弃(仅户外、出行) 
-4 响应信息错误 
-4.1 广告请求 
-错误码 定义 解释 
-200000 NO_AD 请求处理正确，无广告返回 
-200003 AD_ASP_RETURN_ERR 请求处理正确，无广告返回(无预算导致) 
-201010 AD_NO_SIGN 广告无签名 
-201020 MISSING_CRETIVE_TYPE 广告创意类型信息丢失 
-201021 ERROR_CRETIVE_TYPE 广告创意类型信息无法识别 
+### 聚屏返回错误对照表  
+百度聚屏 API 错误码对照表 （适用于API v6.0及以上版本）  
+   
+1 前言  
+错误码对照表文件作为对API 接口的补充说明，在API 接口升级后，会不定期更新维护。每个错误码对应的 处理方法均为引导性建议，对于具体的错误需要相关技术人员根据具体情况来处理。 对文档中未说明的内容，请咨询百度聚屏。  
+注：联调前，请媒体技术人员先本地验证proto序列化、反序列化功能正确。proto版本为2.4  
+2 无错误响应  
+错误码 定义 解释  
+0 NO_ERROR 请求处理正确  
+   
+3 请求信息错误  
+  
+3.1 请求基础信息错误  
+|错误码| 定义| 解释|  
+|100001| MISSING_REQUEST| 请求参数缺失 |  
+注：请求数据无法解析，或解析后请求ID缺失/格式异常时。返回http状态码400，无错误码  
+3.2 API 版本信息错误  
+|错误码| 定义| 解释 |  
+|102000|  MISSING_API_VERSION |使用API 版本信息缺失 |  
+|102010| MISSING_API_VERSION_MAJOR| API API主版本信息缺失 |  
+|102011 |ERROR_API_VERSION |API API版本信息错误 |  
+3.3 APP_ID信息错误  
+错误码 定义 解释   
+|103010  |MISSING_APP_ID| APP_ID信息缺失 |  
+|103011| ERROR_APP_ID| APP_ID信息错误，MSSP未收录 |  
+   
+3.4 设备信息错误   
+错误码 定义 解释  
+104000 MISSING_DEVICE_INFO 设备信息缺失  
+104010 MISSING_DEVICE_TYPE 设备类型信息缺失  
+104011 ERROR_DEVICE_TYPE 设备类型信息错误  
+104020 MISSING_OS_TYPE 操作系统信息缺失  
+104021 ERROR_OS_TYPE 操作系统信息错误  
+104030 MISSING_OS_VERSION 操作系统版本信息缺失  
+104040 MISSING_OS_VERSION_MAJOR 操作系统主版本信息缺失  
+104050 MISSING_VENDOR 厂商信息缺失  
+104060 MISSING_MODEL 设备型号信息缺失  
+104070 MISSING_UDID 设备唯一标识符缺失  
+104071 ERROR_UDID 设备唯一标识符未备案  
+104090 MISSING_SCREEN_SIZE 设备屏幕尺寸信息缺失  
+104100 MISSING_SCREEN_SIZE_WIDTH 设备屏幕尺寸宽度缺失  
+104110 MISSING_SCREEN_SIZE_HEIGHT 设备屏幕尺寸高度缺失  
+104120 MISSING_UDID_ID_TYPE 设备唯一标识符类型缺失  
+104121 ERROR_UDID_ID_TYPE 设备唯一标识符类型错误  
+104130 MISSING_UDID_ID 设备唯一标识符ID值缺失  
+104140 ERROR_FORMAT_MAC 设备mac不符合约定格式  
+3.5 网络环境信息错误  
+错误码 定义 解释  
+105000 MISSING_NETWORK_INFO 网络环境信息缺失  
+105010 MISSING_IPV4 网络地址信息缺失  
+105011 ERROR_FORMAT_IPV4 网络地址信息格式错误  
+105020 MISSING_CONNECTION_TYPE 网络连接类型缺失  
+105021 ERROR_CONNECTION_TYPE 网络连接类型错误  
+105030 MISSING_OPERATOR_TYPE 网络运营商类型缺失  
+105031 ERROR_OPERATOR_TYPE 网络运营商类型错误  
+105040 MISSING_AP_MAC Wi-Fi 热点地址信息缺失  
+105041 ERROR_FORMAT_AP_MAC Wi-Fi 热点地址信息格式错误  
+105050 MISSING_RSSI Wi-Fi 热点信号强度信息缺失  
+105060 MISSING_AP_NAME Wi-Fi 热点名称缺失  
+105070 MISSING_AP_CONNECTION Wi-Fi 连接状态信息缺失  
+3.6 GPS 坐标信息错误  
+错误码 定义 解释   
+106000 MISSING_COORDINATE_TYPE 坐标类型信息缺失  
+106001 ERROR_COORDINATE_TYPE 坐标类型信息错误  
+106010 MISSING_LONGITUDE 经度信息缺失  
+106020 MISSING_LATITUDE 纬度信息缺失  
+  
+  
+106030  MISSING_GPS_TIMESTAMP 定位时间戳信息缺失  
+3.7 广告位信息错误  
+错误码 定义 解释 107000 MISSING_ADSLOT_ID 广告位ID缺失  
+107001 ERROR_ADSLOT_ID 广告位ID未收录  
+107003 NOT_MATCH_ADSLOT_ID 广告位ID与APP_ID不匹配  
+107010 MISSING_ADSLOT_SIZE 广告位尺寸信息缺失  
+107040 MISSING_ADSLOT 广告位信息缺失  
+3.8 其他错误  
+错误码 定义 解释  
+400000 FLOW_DROP_BY_TIME_CONTORL 时段流量丢弃(仅户外、出行)  
+4 响应信息错误  
+4.1 广告请求  
+错误码 定义 解释  
+200000 NO_AD 请求处理正确，无广告返回  
+200003 AD_ASP_RETURN_ERR 请求处理正确，无广告返回(无预算导致)  
+201010 AD_NO_SIGN 广告无签名  
+201020 MISSING_CRETIVE_TYPE 广告创意类型信息丢失  
+201021 ERROR_CRETIVE_TYPE 广告创意类型信息无法识别  
 201030 MISSING_INTERATION_TYPE 广告动作类型信息丢失 
-201031 ERROR_INTERATION_TYPE 广告动作类型信息无法识别 
-201040 MISSING_WIN_NOTICE_URL 曝光汇报地址丢失 
-201041 ERROR_WIN_NOTICE_URL_SIZE 曝光汇报地址异常 
-201050 MISSING_CLICK_URL 点击响应地址丢失 
-201060 MISSING_TITLE 推广标题丢失 
-201070 MISSING_DESCRIPTION 推广描述丢失 
-201080 MISSING_APP_PACKAGE 推广应用包名丢失 
-201090 MISSING_APP_SIZE 推广应用包大小丢失 
-201100 MISSING_ICON_SRC 推广图标丢失 
-201110 MISSING_IMAGE_SRC 推广图片丢失 
-201111 AD_BAD_JSON 广告json串错误 
+201031 ERROR_INTERATION_TYPE 广告动作类型信息无法识别  
+201040 MISSING_WIN_NOTICE_URL 曝光汇报地址丢失  
+201041 ERROR_WIN_NOTICE_URL_SIZE 曝光汇报地址异常  
+201050 MISSING_CLICK_URL 点击响应地址丢失  
+201060 MISSING_TITLE 推广标题丢失  
+201070 MISSING_DESCRIPTION 推广描述丢失  
+201080 MISSING_APP_PACKAGE 推广应用包名丢失  
+201090 MISSING_APP_SIZE 推广应用包大小丢失  
+201100 MISSING_ICON_SRC 推广图标丢失  
+201110 MISSING_IMAGE_SRC 推广图片丢失  
+201111 AD_BAD_JSON 广告json串错误  
+  
+5 典型case  
+1) 接口返回http状态码400 请求数据无法解析，或解析后请求ID 缺失/格式异常时。返回http状态码400，无错误码。请本地验证请求数据 可解析，并检查请求ID格式满足要求：仅英文字母和数字，32 位，大小写不敏感  
+2) 设备ID未备案（104071 ERROR_UDID） 请求参数中udid未在媒体配置表中提供，认为是非法流量，返回 104071错误。  
+3) API版本信息错误 API主版本号必填，初始版本为6.0.0  
+4) APP_ID未收录（103011 ERROR_APP_ID） app_id填写错误，请确认与mssp申请的app_id一致  
+5) 广告位ID 未收录（107001 ERROR_ADSLOT_ID） 广告位id填写错误，请确认与mssp申请的广告位id一致  
+6) 广告位ID 与APP_ID不匹配（107003 NOT_MATCH_ADSLOT_ID） 请确认请求参数中，广告位ID、APP_ID在媒体配置表是对应关系  
+7) 无广告返回处理 200000 NO_AD：指百度聚屏内部错误，导致无广告返回。 201000 AD_NO_DATA：指请求处理正常，但无广告主投放，因此无广告返回；返回201000 可以认为接口测 试通过。  
+8) proto版本错误 请按proto2版本开发。使用proto3可能出现解析异常等问题。  
+9) 必填参数缺失 proto注释中标明为“必填”参数，不可缺失，否则接口返回错误。特别注意以下两点 - 参数是否“必填”，以proto注释为准。请勿参照字段限定修饰符中的optional/required - wifi ap参数为选填，如选择填写，则ap_mac/rssi/ap_name不可为空。类似的还有探针参数、GPS参数  
+10) 参数格式错误 部分参数有格式校验，如request_id、ipv4、udid、ap_mac、client_mac等。校验不通过，接口返回错误  
+11) 枚举值参数超出全集 os_type、connection_type、operator_type、coordinate_type取值不可超出proto 给出的枚举值，否则接 口返回错误  
+12) 返回信息http头部字段 返回信息中，http头部字段Content-Length与返回内容实际大小不一致。解析时请勿使用。  
 
-5 典型case 
-1) 接口返回http状态码400 请求数据无法解析，或解析后请求ID 缺失/格式异常时。返回http状态码400，无错误码。请本地验证请求数据 可解析，并检查请求ID格式满足要求：仅英文字母和数字，32 位，大小写不敏感 
-2) 设备ID未备案（104071 ERROR_UDID） 请求参数中udid未在媒体配置表中提供，认为是非法流量，返回 104071错误。 
-3) API版本信息错误 API主版本号必填，初始版本为6.0.0 
-4) APP_ID未收录（103011 ERROR_APP_ID） app_id填写错误，请确认与mssp申请的app_id一致 
-5) 广告位ID 未收录（107001 ERROR_ADSLOT_ID） 广告位id填写错误，请确认与mssp申请的广告位id一致 
-6) 广告位ID 与APP_ID不匹配（107003 NOT_MATCH_ADSLOT_ID） 请确认请求参数中，广告位ID、APP_ID在媒体配置表是对应关系 
-7) 无广告返回处理 200000 NO_AD：指百度聚屏内部错误，导致无广告返回。 201000 AD_NO_DATA：指请求处理正常，但无广告主投放，因此无广告返回；返回201000 可以认为接口测 试通过。 
-8) proto版本错误 请按proto2版本开发。使用proto3可能出现解析异常等问题。 
-9) 必填参数缺失 proto注释中标明为“必填”参数，不可缺失，否则接口返回错误。特别注意以下两点 - 参数是否“必填”，以proto注释为准。请勿参照字段限定修饰符中的optional/required - wifi ap参数为选填，如选择填写，则ap_mac/rssi/ap_name不可为空。类似的还有探针参数、GPS参数 
-10) 参数格式错误 部分参数有格式校验，如request_id、ipv4、udid、ap_mac、client_mac等。校验不通过，接口返回错误 
-11) 枚举值参数超出全集 os_type、connection_type、operator_type、coordinate_type取值不可超出proto 给出的枚举值，否则接 口返回错误 
-12) 返回信息http头部字段 返回信息中，http头部字段Content-Length与返回内容实际大小不一致。解析时请勿使用。 
