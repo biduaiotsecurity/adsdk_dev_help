@@ -581,3 +581,14 @@ retCode 为 0x01 包名或者md5不匹配
 11) 枚举值参数超出全集 os_type、connection_type、operator_type、coordinate_type取值不可超出proto 给出的枚举值，否则接 口返回错误  
 12) 返回信息http头部字段 返回信息中，http头部字段Content-Length与返回内容实际大小不一致。解析时请勿使用。  
 
+### Q&A（持续更新）
+1 Q：Unable to resolve dependency for XXX Could not download safehttp.aar (com.baidu.safehttp:safehttp:1.0.13)
+A：到https://bintray.com/bdaiotsecurity 或者咨询相应的开发人员获取aidl-1.0.0、safehttp-1.0.13以及saferequest-1.1.0.43等aar包。
+```c
+并且替换
+    implementation "com.baidu.adsdk:saferequest:1.1.0.43"
+为：
+    implementation(name: 'aidl-1.0.0', ext: 'aar')
+    implementation(name: 'safehttp-1.0.13', ext: 'aar')
+    implementation(name: 'saferequest-1.1.0.43', ext: 'aar')
+```
