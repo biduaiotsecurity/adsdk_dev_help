@@ -170,7 +170,7 @@ if (Build.VERSION.SDK_INT > 23) {
     android:layout_height="match_parent"
     tools:context=".activitys.VideoViewAutoActivity">
 
-    <com.baidu.adsdk.view.BDVideoView
+    <com.baidu.adsdk.view.BDGLVideoView
         android:id="@+id/bd_video_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -592,3 +592,9 @@ retCode 为 0x01 包名或者md5不匹配
     implementation(name: 'safehttp-1.0.13', ext: 'aar')
     implementation(name: 'saferequest-1.1.0.43', ext: 'aar')
 ```
+
+* 2)Q: protubuf和宿主版本不一致导致编译失败。
+* A: SDK版本用的是protubuf3.0，会用到一些新特性，但是也向下兼容，宿主版本如果之前用的是3.0以下的，先clean一下工程，把之前protubuf自动生成的代码先清掉，再用3.0重新编译即可。
+
+* 3)Q: 使用BDGalleryView崩溃，抛出NoXXXFoundException。
+* A: 这个是因为宿主用的Glide版本和SDK不一致导致的，Glide版本间差异会比较大，不同版本引入的新特性不一定能兼容。
