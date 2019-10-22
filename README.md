@@ -170,6 +170,7 @@ if (Build.VERSION.SDK_INT > 23) {
     android:layout_height="match_parent"
     tools:context=".activitys.VideoViewAutoActivity">
 
+    // 如果之前用的是BDVideoView，可以直接换成BDGLVideoView
     <com.baidu.adsdk.view.BDGLVideoView
         android:id="@+id/bd_video_view"
         android:layout_width="match_parent"
@@ -356,7 +357,13 @@ public class ManualActivity extends AppCompatActivity {
         // 发起视频组件的广告请求
         videoController.loadAdAsync();
     }
-
+    
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        videoController.releaseAd();
+        galController.releaseAd();
+    }
 
     /**
      * 提供一个骨架方法，业务方不需要重写每个回调时使用。仅为降低代码冗余度
