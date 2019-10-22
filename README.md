@@ -207,30 +207,6 @@ if (Build.VERSION.SDK_INT > 23) {
 ```
 接入后，图片轮播组件将会持续以固定的intervalTime间隔切换广告。
 
-#### 视频图片二合一自动切换轮播组件
-
-```
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activitys.PlayMixMediaActivity">
-
-    <com.baidu.adsdk.view.BDMixMediaPlayView
-        android:layout_width="match_parent"
-	// 图片播放时间，单位是s，设置的时间必须在[5,30]秒中间，如果不在这个范围，默认15秒。
-	app:imagePlayTime="15"
-	// 设置是否自动模式，如果这里填false，则必须使用手动代码方式来控制广告请求与播放。
-        app:playAuto="true"
-	// 图片广告位id
-        app:imageslotid="6660001"
-	// 视频广告位id
-        app:videoslotid="Jy0FoE5qy"
-        android:layout_height="match_parent" />
-</LinearLayout>
-```
-
 ### 代码布局，媒体方自己通过代码控制广告请求与播放
 下面这里例子使用了一个视频组件与一个图片轮播组件，模拟了一种场景：
 播一个视频，播放成功后再播一个图片，再播放一个视频，由此往复循环。
