@@ -400,6 +400,9 @@ public class ManualActivity extends AppCompatActivity {
 
 ## 附录
 
+### 时序图
+![image](https://github.com/biduaiotsecurity/adsdk_dev_help/blob/master/%E8%81%9A%E5%B1%8FSDK%E6%97%B6%E5%BA%8F%E5%9B%BE.jpg)
+
 
 ### 错误列表（持续更新）
 ```javascript { .theme-peacock }
