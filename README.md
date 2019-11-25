@@ -52,7 +52,7 @@ dependencies {
     // 广告sdk
     implementation (name: 'adsdk_release_vxxx', ext: 'aar')
     // 内部库
-    implementation "com.baidu.adsdk:saferequest:1.2.0.53"
+    implementation "com.baidu.adsdk:saferequest:1.2.0.56"
     // glide
     implementation("com.github.bumptech.glide:glide:4.8.0") {
         exclude group: 'com.android.support'
