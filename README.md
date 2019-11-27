@@ -583,11 +583,11 @@ retCode 为 0x01 包名或者md5不匹配
 * A：到https://bintray.com/bdaiotsecurity 或者咨询相应的开发人员获取aidl-1.0.0、safehttp-1.0.13以及saferequest-1.1.0.43等aar包。
 ```c
 并且替换
-    implementation "com.baidu.adsdk:saferequest:1.1.0.43"
+    implementation "com.baidu.adsdk:saferequest:1.2.1.3"
 为：
     implementation(name: 'aidl-1.0.0', ext: 'aar')
-    implementation(name: 'safehttp-1.0.13', ext: 'aar')
-    implementation(name: 'saferequest-1.1.0.43', ext: 'aar')
+    implementation(name: 'safehttp-1.0.29', ext: 'aar')
+    implementation(name: 'saferequest-1.2.1.3', ext: 'aar')
 ```
 
 * 2)Q: protubuf和宿主版本不一致导致编译失败。
