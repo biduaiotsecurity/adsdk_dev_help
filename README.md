@@ -595,3 +595,8 @@ retCode 为 0x01 包名或者md5不匹配
 
 * 3)Q: 使用BDGalleryView崩溃，抛出NoXXXFoundException。
 * A: 这个是因为宿主用的Glide版本和SDK不一致导致的，Glide版本间差异会比较大，不同版本引入的新特性不一定能兼容。
+
+* 3) Q: NullPointerException异常，并且堆栈在：EncryptUtilWrapper的。
+* A： 看下app的Manifest文件中Application节点中是否加入了:process属性。
+      一定要在application onCreate中调用我们sdk。
+
