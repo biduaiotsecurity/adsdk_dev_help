@@ -87,7 +87,7 @@ public void onCreate() {
      * @param mediaId :
      * 1. 如果广告位类型是户外，必须填写mediaid（64位以内，仅英文或数字或下划线_或冒号:）, 需要自己保证设备唯一性。
      * 另外，这个mediaid需要在聚屏方注册。
-     * 2. 如果你的广告位类型是ott或者开屏广告，则可以不填写mediaid（填写为null）,sdk将会自动获取mac进行请求。
+     * 2. 如果你的广告位类型是ott或者开屏广告，则填写为null,sdk将会自动获取mac进行请求。
      */
     AdWrapper.INSTANCE.init(this, 聚屏分配的appSid, 渠道， mediaId);
 }
