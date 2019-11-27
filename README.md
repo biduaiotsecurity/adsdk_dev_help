@@ -51,6 +51,8 @@ repositories {
 dependencies {
     // 广告sdk
     implementation (name: 'adsdk_release_vxxx', ext: 'aar')
+    // 请求SDK
+    implementation (name: 'libtianjiadsdk-release-vxxx', ext: 'aar')
     // 内部库
     implementation "com.baidu.adsdk:saferequest:1.2.1.3"
     // glide
