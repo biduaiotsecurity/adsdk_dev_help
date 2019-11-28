@@ -92,6 +92,7 @@ public void onCreate() {
      * 2. 如果你的广告位类型是ott或者开屏广告，则填写为null,sdk将会自动获取mac进行请求。
      */
     AdWrapper.INSTANCE.init(this, 聚屏分配的appSid, 渠道， mediaId);
+    AdWrapper.INSTANCE.enableTest(); // 如果需要使用测试环境才需要enable，否则不填
 }
 ```
 
