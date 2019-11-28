@@ -385,7 +385,7 @@ public class ManualActivity extends AppCompatActivity {
 
 * 通过View先拿到IControl对象，接着调用setVolume(float volume)来设置音量的大小，volume取值范围在0~1，0代表无声，1代表最大音量。需要在loadAd之前调用。
 
-## 回调接口
+## 回调接口(IAdListener, package com.baidu.adsdk.interfaces)
 
 回调接口的具体含义如下：
 
@@ -404,6 +404,8 @@ public class ManualActivity extends AppCompatActivity {
 ### 请求广告
 这部分关心如下几个接口：
 ```javascript { .theme-peacock }
+package com.baidu.adsdk.model.interfaces
+
 interface IADModel {
     // 将在一开始被回调一次
     fun init(context: Context, sdkContext: SdkContext)
@@ -441,6 +443,8 @@ interface IModelManager {
 这部分关心如下两个接口：
 
 ```javascript { .theme-peacock }
+package com.baidu.adsdk.model.interfaces
+
 interface IBill {
     /**
      * 给机会计费，只在这里传递通用数据，具体其它需要的数据可以在createBill里做自己设置进去。
@@ -463,6 +467,8 @@ SDK支持自定义播放器。
 关心如下几个接口
 
 ```javascript { .theme-peacock }
+com.baidu.adsdk.interfaces
+
 interface IPlayer {
 
     /**
