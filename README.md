@@ -382,11 +382,11 @@ public class ManualActivity extends AppCompatActivity {
 
 ```
 
-## 音量控制接口
+## 音量控制
 
 * 通过View先拿到IControl对象，接着调用setVolume(float volume)来设置音量的大小，volume取值范围在0~1，0代表无声，1代表最大音量。需要在loadAd之前调用。
 
-## 回调接口(IAdListener, package com.baidu.adsdk.interfaces)
+## 广告播放回调接口(IAdListener, package com.baidu.adsdk.interfaces)
 
 回调接口的具体含义如下：
 
