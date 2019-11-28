@@ -395,6 +395,134 @@ public class ManualActivity extends AppCompatActivity {
 * onAdClick点击广告时回调
 * onAdDismissed比如按了home键或者其他activtiy在这个View上面，这个方法就会被回调
 
+## 额外特性
+
+如果你还有第三方广告参与，需要做如下工作。
+可以自定义的流程包含如下几个阶段：请求广告、监播结果、计费
+### 请求广告
+这部分关心如下几个接口：
+```
+interface IADModel {
+    // 将在一开始被回调一次
+    fun init(context: Context, sdkContext: SdkContext)
+
+    // 请求广告
+    fun requestAd(requestId: String, slotId: String, request: IRequestResult)
+
+    // 计费接口，没有就返回null
+    fun createBill(adData: AdData): IBill?
+}
+
+interface IRequestResult {
+    // 使用者内部请求到广告后，将数据回传给SDK，这个接口在上面requestAd时已传入内部
+    fun onRequestSuccess(adData: AdData)
+    // 使用者内部请求到广告后，将数据回传给SDK，这个接口在上面requestAd时已传入内部
+    fun onRequestFailed(code: Int, requestInfo: RequestInfo)
+}
+
+
+interface IModelManager {
+    // 初始化，SDK将在初始化时调用此接口一次。
+    fun init(sdkContext: SdkContext)
+    // 返回一个图片类别的model给SDK进行播控，当有多个model时候，可以自己定制策略返回适当的model。
+    fun getImageModel(): IADModel?
+    // 返回一个视频类别的model给SDK进行播控，当有多个model时候，可以自己定制策略返回适当的model。
+    fun getVideoModel(): IADModel?
+}
+```
+
+* 实例化一个或多个IADModel，可以负责请求图片类广告、请求视频类广告。
+* 实例化一个IModelManager。
+* AdWrapper.INSTANCE.addModelManager(传入自己的实例)
+
+### 计费
+这部分关心如下两个接口：
+
+```
+interface IBill {
+    /**
+     * 给机会计费，只在这里传递通用数据，具体其它需要的数据可以在createBill里做自己设置进去。
+     */
+    fun calculateCost(adData: AdData, billResult: IBillResult)
+}
+
+interface IBillResult {
+    fun onBillSuccess(adData: AdData)
+    fun onBillFailed(adData: AdData, ec: Int)
+}
+```
+
+* 创建一个实例实现IBill接口
+* 在model的createBill接口实现部分返回你的IBill实例
+* 在calculateCost实现计费逻辑，并将计费结果通过IBillResult接口返回给SDK
+
+### 自定义播放器
+SDK支持自定义播放器。
+关心如下几个接口
+
+```
+interface IPlayer {
+
+    /**
+     * @param path while the file is downloaded.
+     * */
+    fun preparing(path: String)
+
+    /**
+     * start to play prepare video or image.
+     * Before invoke start(), you must invokes {@link #prepare()} first.
+     * */
+    fun start()
+
+    /**
+     * stop to play current video or image.
+     * */
+    fun stop()
+
+    /**
+     * When view is being destroy, this function must be invoked
+     * */
+    fun release()
+
+    /**
+     * set Display surfaceholder
+     * */
+    fun setDisplay(sh: SurfaceHolder)
+
+    /**
+     * set surface
+     * */
+    fun setSurface(surface: Surface)
+
+    /**
+     * get duration
+     * @return
+     * */
+    fun getDuration(): Long
+
+    /**
+     * set volume
+     * */
+    fun setVolume(leftVolume: Float, rightVolume: Float)
+
+    fun setIPlayerCallback(callback: IPlayerCallback)
+
+}
+
+interface IPlayerCallback {
+
+    fun notifyPlayerPrepared()
+
+    fun notifyPlayerFail(errorCode: Int)
+
+    fun notifyPlayerCompetition()
+
+}
+```
+
+* 创建IPlayer实例。
+* SDK外部会通过setIPlayerCallback,内部可以保存这个接口在适当时候回调给SDK外部。
+
 ## 限制
 
 * 不允许在播放过程中遮盖、隐藏、调整大小广告组件，否则将会影响收益。
