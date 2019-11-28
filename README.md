@@ -403,7 +403,7 @@ public class ManualActivity extends AppCompatActivity {
 ![image](https://github.com/biduaiotsecurity/adsdk_dev_help/blob/master/%E8%81%9A%E5%B1%8FSDK%E6%97%B6%E5%BA%8F%E5%9B%BE.jpg)
 ### 请求广告
 这部分关心如下几个接口：
-```
+```javascript { .theme-peacock }
 interface IADModel {
     // 将在一开始被回调一次
     fun init(context: Context, sdkContext: SdkContext)
@@ -440,7 +440,7 @@ interface IModelManager {
 ### 计费
 这部分关心如下两个接口：
 
-```
+```javascript { .theme-peacock }
 interface IBill {
     /**
      * 给机会计费，只在这里传递通用数据，具体其它需要的数据可以在createBill里做自己设置进去。
@@ -462,7 +462,7 @@ interface IBillResult {
 SDK支持自定义播放器。
 关心如下几个接口
 
-```
+```javascript { .theme-peacock }
 interface IPlayer {
 
     /**
