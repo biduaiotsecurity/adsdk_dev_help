@@ -401,7 +401,7 @@ public class ManualActivity extends AppCompatActivity {
 如果你还有第三方广告参与，需要做如下工作。
 可以自定义的流程包含如下几个阶段：请求广告、监播结果、计费、自定义播放器
 这部分整体流程如下图：
-![image](https://github.com/biduaiotsecurity/adsdk_dev_help/blob/master/%E8%81%9A%E5%B1%8FSDK%E6%97%B6%E5%BA%8F%E5%9B%BE.jpg)
+![image](https://github.com/biduaiotsecurity/adsdk_dev_help/blob/master/%E9%A2%9D%E5%A4%96%E7%89%B9%E6%80%A7.jpg)
 ### 请求广告
 这部分关心如下几个接口：
 ```javascript { .theme-peacock }
