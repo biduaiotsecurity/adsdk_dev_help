@@ -186,6 +186,29 @@ if (Build.VERSION.SDK_INT > 23) {
 ```
 接入后，视频组件将会一直持续播放，并自动请求广告。
 
+#### 预先请求多个广告
+* 通过Controller调用preLoadMoreAds(maxReqNums: Int, needAds: Int, callback: IPreLoadAdProgress)方法。
+* 参数1 maxReqNums: 这次任务的最大请求数；
+* 参数2 needAds: 这次任务需要下载的广告数，为避免计费串失效，最大为4；
+* 参数3 callback: 这次任务的请求过程的回调,如下,参数意义为第几个请求，是否成功，错误码，请求信息
+
+```
+interface IPreLoadAdProgress {
+	
+    fun progress(index: Int, suc: Boolean, errCode: Int, info: RequestInfo)
+
+}
+```
+* 注意点：
+* 因为每次请求不一定有广告，所以会有前面两个参数，避免频繁，无意义，不合理的请求；
+* 参数1和参数2任一条件达到，此次任务结束；
+
+* 举例：
+* 如果调用了 preLoadMoreAds(10, 3, callback), 那么最多请求10次广告，最多能提前准备好三个要播放的广告。如果请求了10次，还是没有能准备到3个广告，此次任务就会结束。
+
+* 和loadAdAsync方法的区别：
+* preLoadMoreAds是提前准备，媒体可以根据回调判断提前请求的任务是否结束，结束后，调用loadAdAsync，会从已经准备好的广告列表里拿数据，有的话直接返回，没有的话再向聚屏服务器请求广告，其余流程不变。
+
 #### 图片轮播组件
 额外有一个独立的属性：
 `intervalTime`设置x秒换一张图片，设置的时间必须在[5,30]秒中间，如果不在这个范围，默认15秒。
@@ -528,9 +551,10 @@ interface IPlayerCallback {
 
 }
 ```
-
-* 创建IPlayer实例。
-* SDK外部会通过setIPlayerCallback,内部可以保存这个接口在适当时候回调给SDK外部。
+* 使用步骤：
+* ①自己的播放器实现IPlayer接口。
+* ②SDK内部自己会调用setIPlayerCallback传给播放器,播放器需要保存这个接口在适当时候回调给SDK内部。
+* ③通过View拿到Controller,调用setIPlayer即可
 
 ## 限制
 
