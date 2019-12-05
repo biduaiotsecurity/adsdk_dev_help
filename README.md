@@ -404,6 +404,11 @@ public class ManualActivity extends AppCompatActivity {
 }
 
 ```
+## 截图接口
+* 通过IController对象，调用captureAsync接口，返回正在播放的Bitmap，返回后需要自行回收！
+
+## 播放本地素材接口
+* 通过IController对象，调用playLocalMedia接口，AdData里面的url赋值给本地素材的路径。
 
 ## 音量控制
 
