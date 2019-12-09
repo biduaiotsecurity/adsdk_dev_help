@@ -410,6 +410,9 @@ public class ManualActivity extends AppCompatActivity {
 ## 播放本地素材接口
 * 通过IController对象，调用playLocalMedia接口，AdData里面的url赋值给本地素材的路径。
 
+## 监播回调接口
+* 通过IController对象，调用setMonitorCallback接口，在广告播放过程中回回调监播情况。
+
 ## 音量控制
 
 * 通过View先拿到IControl对象，接着调用setVolume(float volume)来设置音量的大小，volume取值范围在0~1，0代表无声，1代表最大音量。需要在loadAd之前调用。
@@ -600,6 +603,9 @@ interface IPlayerCallback {
 -204 start_fail
 -205 stop_fail
 
+-300 monitor_no_adta
+-301 monitor_already
+-302 monitor_capture_null
 
 SDK身份校验错误码：
 retCode 为 0x01 包名或者md5不匹配
