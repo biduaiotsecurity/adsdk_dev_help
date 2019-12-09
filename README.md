@@ -604,7 +604,6 @@ interface IPlayerCallback {
 -205 stop_fail
 
 -300 monitor_no_adta
--301 monitor_already
 -302 monitor_capture_null
 
 SDK身份校验错误码：
