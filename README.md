@@ -773,3 +773,6 @@ retCode 为 0x01 包名或者md5不匹配
 * A： 看下app的Manifest文件中Application节点中是否加入了:process属性。
       一定要在application onCreate中调用我们sdk。
 
+
+
+test
