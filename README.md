@@ -23,11 +23,26 @@ SDK接入前，需提前准备以下参数：
    * 若接入设备的广告类型为户外，则需准备该字段，该字段需保证唯一性且已在聚屏平台注册；
    * 若接入设备的广告类型为OTT或开屏广告，则可以填写为null。
 * channel：渠道名，一般在交付邮件中将会列出；
+* lbsapi.API_KEY：百度定位SDK的KEY，需要在地图SDK后台自行创建
+（http://lbsyun.baidu.com/apiconsole/key）
+* BDAI_FACE_LICENSE:百度人脸SDK的授权License，需要在人脸SDK后台自行创建
+ (https://cloud.baidu.com/product/imagerecognition 目前支持批量授权License)
 
 以上信息若有疑问，可联系我们获取。
 
 
 ## 集成
+在Manifest.xml中加入：
+```
+<meta-data
+    android:name="BDAI_FACE_LICENSE"
+    android:value="人脸批量授权License">
+</meta-data>
+<meta-data
+    android:name="com.baidu.lbsapi.API_KEY"
+    android:value="您的定位SDK EKY值">
+</meta-data>
+```
 在根gradle文件下加入：
 ```javascript { .theme-peacock }
 
