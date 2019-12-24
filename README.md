@@ -401,7 +401,7 @@ public class ManualActivity extends AppCompatActivity {
 }
 
 ```
-##相关接口介绍
+## 相关接口介绍
 
 ### 广告播放回调接口(IAdListener, package com.baidu.adsdk.interfaces)
 
