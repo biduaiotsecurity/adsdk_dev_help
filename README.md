@@ -1,4 +1,5 @@
-# 百度聚屏广告SDK接入文档V1.2.2
+# 广告AdSDK接入文档V1.2
+
 
 ## 产品介绍
 百度聚屏广告SDK，合入了百度安全监播端-云一体方案，端上通过自有安全播放器、广告安全校验等技术，保障端上播放行为安全可控；云上通过自研安全算法、区块链等技术，从播放可信、设备可信、数据可信3个维度，保障广告播放行为真实可信；同时，SDK内置广告播放器具备高兼容性，支持高清流畅播放mp4、jpg等主流图片/视频广告格式。通过以上核心能力，可从端到云，全面保障媒体广告播放的真实性、安全性和流畅性。
@@ -29,10 +30,25 @@ SDK接入前，需提前准备以下参数：
  (https://cloud.baidu.com/product/imagerecognition 目前支持批量授权License)
 
 以上信息若有疑问，可联系我们获取。
+### 身份校验（必须）
+以下信息需要给到百度，百度进行入库，否则将请求不到广告。出于安全性的考虑，后台需要对客户端鉴权，防止第三方拿到SDK之后作弊，目的是为了保障客户权益。
+#### 需要提供应用程序包名
+例如：`com.baidu.xxxx`
+也就是app得gradle文件中的`applicationId`
+#### APP签名的md5
+
+```
+keytool -printcert -file CERT.RSA
+```
+
+签名后从APK解压出来则可以看到此文件，文件放于在META-INF文件夹。
+PS：keytool工具为JDK里自带。可在jdk\bin或者jdk\jre\bin目录下找到。
+**如果有debug运行需求，可以把debug版的签名一并给到我们**（一般一台机器一个debug签名，可以按需求加）
 
 
-## 集成
-在Manifest.xml中加入：
+
+## SDK集成
+### 在Manifest.xml中加入：
 ```
 <meta-data
     android:name="BDAI_FACE_LICENSE"
@@ -43,7 +59,7 @@ SDK接入前，需提前准备以下参数：
     android:value="您的定位SDK EKY值">
 </meta-data>
 ```
-在根gradle文件下加入：
+#### 在根gradle文件下加入：
 ```javascript { .theme-peacock }
 
 allprojects {
@@ -56,7 +72,7 @@ allprojects {
 ```
 
 
-在app的gradle下加入：
+### 在app的gradle下加入：
 ```c
 repositories {
     flatDir {
@@ -69,7 +85,7 @@ dependencies {
     // 请求SDK
     implementation (name: 'libtianjiadsdk-release-vxxx', ext: 'aar')
     // 内部库
-    implementation "com.baidu.adsdk:saferequest:1.2.1.3"
+    implementation "com.baidu.adsdk:saferequest:1.2.x.x"
     // glide
     implementation("com.github.bumptech.glide:glide:4.8.0") {
         exclude group: 'com.android.support'
@@ -92,8 +108,8 @@ compileOptions {
 ```
 
 
-## 初始化(必须）
-在Application的onCreate中初始化。
+## SDK初始化
+### 在Application的onCreate中初始化。
 ```javascript { .theme-peacock }
 @Override
 public void onCreate() {
@@ -111,7 +127,7 @@ public void onCreate() {
 }
 ```
 
-## 参数设置（可选，推荐填写）
+### 初始化时的参数设置（可选，推荐填写）
 下面在AdWrapper中，可通过`AdWrapper.Instance.XXX`访问，在init之后调用
 ```ruby
 /**
@@ -130,24 +146,15 @@ fun setIsAIO(isAIO: Boolean)
  * 如选择填写, 如果填写就会利用此类信息触发广告,能获取到尽量传，可以传了可以触发更多的广告
  */
 fun setProbInfo(infos: Map<String, Int>)
+
+/**
+ * 设置缓存路径。
+ */
+fun setCacheDir(context: Application, cacheDirPath: String)
 ```
 
-## 身份校验（必须）
-以下信息需要给到百度，百度进行入库，否则将请求不到广告。出于安全性的考虑，后台需要对客户端鉴权，防止第三方拿到SDK之后作弊，目的是为了保障客户权益。
-### 需要提供应用程序包名
-例如：`com.baidu.xxxx`
-也就是app得gradle文件中的`applicationId`
-### APP签名的md5
 
-```
-keytool -printcert -file CERT.RSA
-```
-
-签名后从APK解压出来则可以看到此文件，文件放于在META-INF文件夹。
-PS：keytool工具为JDK里自带。可在jdk\bin或者jdk\jre\bin目录下找到。
-如果有debug运行需求，可以把debug版的签名一并给到我们（一般一台机器一个debug签名，可以按需求加）
-
-## 权限（必须）
+## 相关权限（必须）
 如果APP的apilevel>=23 也就是 Android版本>=6.0。
 需要在第一个activity里申请权限。
 
@@ -201,32 +208,9 @@ if (Build.VERSION.SDK_INT > 23) {
 ```
 接入后，视频组件将会一直持续播放，并自动请求广告。
 
-#### 预先请求多个广告
-* 通过Controller调用preLoadMoreAds(maxReqNums: Int, needAds: Int, callback: IPreLoadAdProgress)方法。
-* 参数1 maxReqNums: 这次任务的最大请求数；
-* 参数2 needAds: 这次任务需要下载的广告数，为避免计费串失效，最大为4；
-* 参数3 callback: 这次任务的请求过程的回调,如下,参数意义为第几个请求，是否成功，错误码，请求信息
-
-```
-interface IPreLoadAdProgress {
-	
-    fun progress(index: Int, suc: Boolean, errCode: Int, info: RequestInfo)
-
-}
-```
-##### 注意点：
-* 因为每次请求不一定有广告，所以会有前面两个参数，避免频繁，无意义，不合理的请求；
-* 参数1和参数2任一条件达到，此次任务结束；
-
-##### 举例：
-* 如果调用了 preLoadMoreAds(10, 3, callback), 那么最多请求10次广告，最多能提前准备好三个要播放的广告。如果请求了10次，还是没有能准备到3个广告，此次任务就会结束。
-
-##### 和loadAdAsync方法的区别：
-* preLoadMoreAds是提前准备，媒体可以根据回调判断提前请求的任务是否结束，结束后，调用loadAdAsync，会从已经准备好的广告列表里拿数据，有的话直接返回，没有的话再向聚屏服务器请求广告，其余流程不变。
 
 #### 图片轮播组件
-额外有一个独立的属性：
-`intervalTime`设置x秒换一张图片，设置的时间必须在[5,30]秒中间，如果不在这个范围，默认15秒。
+
 ```javascript { .theme-peacock }
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -240,15 +224,13 @@ interface IPreLoadAdProgress {
         android:layout_height="match_parent"
 	// 设置是否自动模式，如果这里填false，则必须使用手动代码方式来控制广告请求与播放。
         app:auto="true"
-	// 图片播放时间，单位是s，设置的时间必须在[5,30]秒中间，如果不在这个范围，默认15秒。
-        app:intervalTime="15"
 	// 设置图片广告位id
         app:slotid="6660001" />
 </LinearLayout>
 ```
-接入后，图片轮播组件将会持续以固定的intervalTime间隔切换广告。
 
-### 代码布局，媒体方自己通过代码控制广告请求与播放
+
+### 代码示例，媒体方自己通过代码控制广告请求与播放
 下面这里例子使用了一个视频组件与一个图片轮播组件，模拟了一种场景：
 播一个视频，播放成功后再播一个图片，再播放一个视频，由此往复循环。
 当然你也可以使用我们提供的mix(二合一组件），里面已经把这个逻辑做好了。
@@ -419,99 +401,88 @@ public class ManualActivity extends AppCompatActivity {
 }
 
 ```
-## 截图接口
-* 通过IController对象，调用captureAsync接口，返回正在播放的Bitmap，返回后需要自行回收！
+##相关接口介绍
 
-## 播放本地素材接口
-* 通过IController对象，调用playLocalMedia接口，AdData里面的url赋值给本地素材的路径。
+### 广告播放回调接口(IAdListener, package com.baidu.adsdk.interfaces)
 
-## 监播回调接口
-* 通过IController对象，调用setMonitorCallback接口，在广告播放过程中回回调监播情况。
+此接口通过IController.addAdListener方法设置。以下接口回调都在主线程，各个回调接口的具体含义如下：
 
-## 音量控制
-
-* 通过View先拿到IControl对象，接着调用setVolume(float volume)来设置音量的大小，volume取值范围在0~1，0代表无声，1代表最大音量。需要在loadAd之前调用。
-
-## 广告播放回调接口(IAdListener, package com.baidu.adsdk.interfaces)
-
-回调接口的具体含义如下：
-
-* onAdPrepared  已经下载好了，但是还没有开始播放。preparedinfo里面有广告请求的唯一标识符与广告位id，此时可以通过controller调用showAd
+* onAdPrepared  已经下载好了，但是还没有开始播放。preparedinfo里面有广告请求的唯一标识符与广告位id，此时可以通过controller调用showAd。
 * onAdStart  已经开始播放了。（是一个时间点）
 * onAdFailed和onAdFinish平行，要么成功完成，要么失败
 * onAdClick点击广告时回调
 * onAdDismissed比如按了home键或者其他activtiy在这个View上面，这个方法就会被回调
 
-## 额外特性
 
-如果你还有第三方广告参与，需要做如下工作。
-可以自定义的流程包含如下几个阶段：请求广告、监播结果、计费、自定义播放器
-这部分整体流程如下图：
-![image](https://github.com/biduaiotsecurity/adsdk_dev_help/blob/master/%E9%A2%9D%E5%A4%96%E7%89%B9%E6%80%A7.jpg)
-### 请求广告
-这部分关心如下几个接口：
-```javascript { .theme-peacock }
-package com.baidu.adsdk.model.interfaces
+### 关于IController
+* IController是SDK的核心类，所有相关的业务逻辑都由IController来完成，通过播放组件View的getController方法就可以拿到这个类。以下接口按照常用性排序：
 
-interface IADModel {
-    // 将在一开始被回调一次
-    fun init(context: Context, sdkContext: SdkContext)
+#### 请求广告loadAdAsync
+* fun loadAdAsync()，**必须调用**，向服务端请求广告。
 
-    // 请求广告
-    fun requestAd(requestId: String, slotId: String, request: IRequestResult)
+#### 设置广告状态回调addAdListener
+* fun addAdListener(adListener: IAdListener)， **必须调用**，通过添加这个接口，在请求失败，下载失败时都能及时回调给APP，这样能及时作出相应的处理。
 
-    // 计费接口，没有就返回null
-    fun createBill(adData: AdData): IBill?
-}
+#### 移除广告状态回调removeAdListener
+* fun removeAdListener(adListener: IAdListener)，**必须调用**，和addAdListener成对出现，通常在组件销毁时调用。
+####  展示广告showAd
+* fun showAd()，**必须调用**，调用时必须是在onAdPrepared回调完成以后。
 
-interface IRequestResult {
-    // 使用者内部请求到广告后，将数据回传给SDK，这个接口在上面requestAd时已传入内部
-    fun onRequestSuccess(adData: AdData)
-    // 使用者内部请求到广告后，将数据回传给SDK，这个接口在上面requestAd时已传入内部
-    fun onRequestFailed(code: Int, requestInfo: RequestInfo)
-}
+#### 释放资源releaseAd
+* fun releaseAd()，**必须调用**，广告组件需要销毁的时候调用，比如在Activity的onDestroy调用，一旦销毁，生命周期结束，不能再使用任何业务。
+#### 设置广告位setSlotid
+* fun setSlotid(slotid: String)，设置广告位ID，由聚屏服务端分配，**必须调用**，但如果在组件View的xml里面填了slotid属性，则可以不需要调用。
 
+#### 音量控制setVolume
+* fun setVolume(value: Float)，非必须调用，volume取值范围在0~1，0代表无声，1代表最大音量。需要在loadAdAsync之前调用，只针对视频有效，不设置则默认是系统媒体的音量。
 
-interface IModelManager {
-    // 初始化，SDK将在初始化时调用此接口一次。
-    fun init(sdkContext: SdkContext)
-    // 返回一个图片类别的model给SDK进行播控，当有多个model时候，可以自己定制策略返回适当的model。
-    fun getImageModel(): IADModel?
-    // 返回一个视频类别的model给SDK进行播控，当有多个model时候，可以自己定制策略返回适当的model。
-    fun getVideoModel(): IADModel?
+#### 保持屏幕常亮keepScreenOn
+* fun keepScreenOn(b: Boolean)，**非必须调用**，b代表是否需要保持屏幕常亮，默认是常亮的。
+
+#### 获取已准备好的广告数getPreparedAdCounts
+* fun getPreparedAdCounts() : Int，**非必须调用**，帮助媒体更好地控制请求和播放，避免频繁请求。如果这个数大于0，则可以马上调用showAd()
+#### 设置第三方播放器setIPlayer
+* fun setIPlayer(player: IPlayer)，**非必须调用**，可以支持第三方的播放器，播放器实例需要实现IPlayer接口，通过此方法传递给SDK。
+#### 停止播放接口stopAd
+* fun stopAd(skip: Boolean)，**非必须调用**，skip代表下次播放时是否需要跳过当前被停止的广告，一般传false即可。
+* 此函数调用完以后下次会重新开始播放素材。
+
+#### 预先请求多个广告preLoadMoreAds
+* fun preLoadMoreAds(maxReqNums: Int, needAds: Int, callback: IPreLoadAdProgress)方法。非必须调用。参数1 maxReqNums: 这次任务的最大请求数；参数2 needAds: 这次任务需要下载的广告数，为避免计费串失效，最大为4；参数3 callback: 这次任务的请求过程的回调,如下,参数意义为第几个请求，是否成功，错误码，请求信息
+
+```
+interface IPreLoadAdProgress {
+	
+    fun progress(index: Int, suc: Boolean, errCode: Int, info: RequestInfo)
+
 }
 ```
+**注意点**：
+① 因为每次请求不一定有广告，所以会有前面两个参数，避免频繁，无意义，不合理的请求；
+② 参数1和参数2任一条件达到，此次任务结束；
 
-* 实例化一个或多个IADModel，可以负责请求图片类广告、请求视频类广告。
-* 实例化一个IModelManager。
-* AdWrapper.INSTANCE.addModelManager(传入自己的实例)
+**举例**：
+* 如果调用了 preLoadMoreAds(10, 3, callback), 那么最多请求10次广告，最多能提前准备好三个要播放的广告。如果请求了10次，还是没有能准备到3个广告，此次任务就会结束。
 
-### 计费
-这部分关心如下两个接口：
+**和loadAdAsync方法的区别：**
+* preLoadMoreAds是提前准备，媒体可以根据回调判断提前请求的任务是否结束，结束后，调用loadAdAsync，会从已经准备好的广告列表里拿数据，有的话直接返回，没有的话再向聚屏服务器请求广告，其余流程不变。
 
-```javascript { .theme-peacock }
-package com.baidu.adsdk.model.interfaces
+#### 返回当前的播放组件getAdView
+* fun getAdView(): View，非必须调用。
+#### 截图captureAsync
+* fun captureAsync(c: (bitmap: Bitmap?) -> Unit) ，非必须调用。参数1是一个函数类型，参数为Bitmap，返回值为空。
+* 返回正在播放的广告的Bitmap，返回后需要自行回收！
+#### 播放本地素材playLocalMedia
+* fun playLocalMedia(file: File, url: String, md5: String = "",
+                       rotation: Float = 0f, duration: Int = 0)，非必须调用。参数1是本地素材的File，参数2代表这个素材的url，可填空字符串；参数3代表这个素材的md5，如果不填或填空字符串，sdk内部会自行计算素材的md5；参数4代表旋转角度，取值范围是-180°~180°，比如90°，代表顺时针旋转90度；参数5代表广告播放时长，单位是秒。
+* 一般媒体不需要调用这个函数。
 
-interface IBill {
-    /**
-     * 给机会计费，只在这里传递通用数据，具体其它需要的数据可以在createBill里做自己设置进去。
-     */
-    fun calculateCost(adData: AdData, billResult: IBillResult)
-}
+#### 监播回调setMonitorCallback
+* fun setMonitorCallback(callback: IMonitorCallback)，播放过程中会回调监播是否成功。
+* IMonitorCallback里面的方法：fun result(info: RequestInfo?, suc: Boolean, code: Int, errMsg: String) ，参数1代表此次播放素材的info，参数2代表监播是否成功.
 
-interface IBillResult {
-    fun onBillSuccess(adData: AdData)
-    fun onBillFailed(adData: AdData, ec: Int)
-}
-```
-
-* 创建一个实例实现IBill接口
-* 在model的createBill接口实现部分返回你的IBill实例
-* 在calculateCost实现计费逻辑，并将计费结果通过IBillResult接口返回给SDK
-
-### 自定义播放器
-SDK支持自定义播放器。
-关心如下几个接口
+### 自定义播放器接口
+功能非必须，扩展类接口，SDK默认使用系统播放器，也支持第三方的播放器，但需要实现如下两个接口：
 
 ```javascript { .theme-peacock }
 com.baidu.adsdk.interfaces
@@ -574,12 +545,79 @@ interface IPlayerCallback {
 
 }
 ```
-* 使用步骤：
+#### 使用方法：
 * ①自己的播放器实现IPlayer接口。
-* ②SDK内部自己会调用setIPlayerCallback传给播放器,播放器需要保存这个接口在适当时候回调给SDK内部。
-* ③通过View拿到Controller,调用setIPlayer即可
+* ②SDK内部自己会调用setIPlayerCallback传给播放器，外部需要保存IPlayerCallback这个接口实例，在适当时候回调给SDK内部。
+* ③通过Controller，调用setIPlayer即可。
 
-## 限制
+### 请求第三方广告
+功能非必须，扩展类接口。如果你还有第三方广告参与，需要做如下工作。
+可以自定义的流程包含如下几个阶段：请求广告、监播结果、计费、自定义播放器
+这部分整体流程如下图：
+![image](https://github.com/biduaiotsecurity/adsdk_dev_help/blob/master/%E9%A2%9D%E5%A4%96%E7%89%B9%E6%80%A7.jpg)
+#### 请求广告
+这部分关心如下几个接口：
+```javascript { .theme-peacock }
+package com.baidu.adsdk.model.interfaces
+
+interface IADModel {
+    // 将在一开始被回调一次
+    fun init(context: Context, sdkContext: SdkContext)
+
+    // 请求广告
+    fun requestAd(requestId: String, slotId: String, request: IRequestResult)
+
+    // 计费接口，没有就返回null
+    fun createBill(adData: AdData): IBill?
+}
+
+interface IRequestResult {
+    // 使用者内部请求到广告后，将数据回传给SDK，这个接口在上面requestAd时已传入内部
+    fun onRequestSuccess(adData: AdData)
+    // 使用者内部请求到广告后，将数据回传给SDK，这个接口在上面requestAd时已传入内部
+    fun onRequestFailed(code: Int, requestInfo: RequestInfo)
+}
+
+
+interface IModelManager {
+    // 初始化，SDK将在初始化时调用此接口一次。
+    fun init(sdkContext: SdkContext)
+    // 返回一个图片类别的model给SDK进行播控，当有多个model时候，可以自己定制策略返回适当的model。
+    fun getImageModel(): IADModel?
+    // 返回一个视频类别的model给SDK进行播控，当有多个model时候，可以自己定制策略返回适当的model。
+    fun getVideoModel(): IADModel?
+}
+```
+
+* 实例化一个或多个IADModel，可以负责请求图片类广告、请求视频类广告。
+* 实例化一个IModelManager。
+* AdWrapper.INSTANCE.addModelManager(传入自己的实例)
+
+#### 计费
+这部分关心如下两个接口：
+
+```javascript { .theme-peacock }
+package com.baidu.adsdk.model.interfaces
+
+interface IBill {
+    /**
+     * 给机会计费，只在这里传递通用数据，具体其它需要的数据可以在createBill里做自己设置进去。
+     */
+    fun calculateCost(adData: AdData, billResult: IBillResult)
+}
+
+interface IBillResult {
+    fun onBillSuccess(adData: AdData)
+    fun onBillFailed(adData: AdData, ec: Int)
+}
+```
+
+* 创建一个实例实现IBill接口
+* 在model的createBill接口实现部分返回你的IBill实例
+* 在calculateCost实现计费逻辑，并将计费结果通过IBillResult接口返回给SDK
+
+
+## SDK使用环境限制
 
 * 不允许在播放过程中遮盖、隐藏、调整大小广告组件，否则将会影响收益。
 * 广告组件大小不能小于300*300px， 否则将会影响收益。
@@ -787,4 +825,3 @@ retCode 为 0x01 包名或者md5不匹配
 * 4) Q: NullPointerException异常，并且堆栈在：EncryptUtilWrapper的。
 * A： 看下app的Manifest文件中Application节点中是否加入了:process属性。
       一定要在application onCreate中调用我们sdk。
-
