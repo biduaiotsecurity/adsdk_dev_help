@@ -35,7 +35,7 @@ SDK接入前，需提前准备以下参数：
 #### 需要提供应用程序包名
 例如：`com.baidu.xxxx`
 也就是app得gradle文件中的`applicationId`
-#### APP签名的md5
+#### 需要APP签名的md5
 
 ```
 keytool -printcert -file CERT.RSA
@@ -59,7 +59,7 @@ PS：keytool工具为JDK里自带。可在jdk\bin或者jdk\jre\bin目录下找�
     android:value="您的定位SDK EKY值">
 </meta-data>
 ```
-#### 在根gradle文件下加入：
+### 在根gradle文件下加入：
 ```javascript { .theme-peacock }
 
 allprojects {
