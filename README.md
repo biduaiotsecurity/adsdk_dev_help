@@ -490,8 +490,8 @@ public class ManualActivity extends AppCompatActivity {
 #### 保持屏幕常亮keepScreenOn
 * fun keepScreenOn(b: Boolean)，**非必须调用**，b代表是否需要保持屏幕常亮，默认是常亮的。
 
-#### 获取已准备好的广告数getPreparedAdCounts
-* fun getPreparedAdCounts() : Int，**非必须调用**，帮助媒体更好地控制请求和播放，避免频繁请求。如果这个数大于0，则可以马上调用showAd()
+#### 获取已下载好的广告数getPreparedAdCounts
+* fun getPreparedAdCounts() : Int，**非必须调用**，帮助媒体更好地控制请求和播放，避免频繁请求。如果这个数大于0，意味着之前下载好的广告还没有播放。
 #### 设置第三方播放器setIPlayer
 * fun setIPlayer(player: IPlayer)，**非必须调用**，可以支持第三方的播放器，播放器实例需要实现IPlayer接口，通过此方法传递给SDK。
 #### 停止播放接口stopAd
