@@ -174,6 +174,8 @@ public void onCreate() {
      * 2. 如果你的广告位类型是ott或者开屏广告，则填写为null,sdk将会自动获取mac进行请求。
      */
     AdWrapper.INSTANCE.init(this, 聚屏分配的appSid, 渠道， mediaId);
+    // 设置缓存路径，第二个参数为缓存路径，如果不设置，默认为/data/包名/下cache目录，第三个参数为缓存最长保留时间，单位为天。7天代表缓存目录下7天以前的广告会被清除，如果不设置，默认为3.
+    AdWrapper.INSTANCE.setCacheDir(this, "/sdcard/test_media/", 7);
     AdWrapper.INSTANCE.enableTest(); // 如果需要使用测试环境才需要enable，否则不填
 }
 ```
