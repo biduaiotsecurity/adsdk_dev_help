@@ -1,6 +1,6 @@
-# 百度聚屏广告AdSDK接入文档V1.2.2
+# 百度聚屏广告AdSDK接入文档V1.5.0
 
-   * [百度聚屏广告AdSDK接入文档V1.2.2](#百度聚屏广告AdSDK接入文档V1.2.2)
+   * [百度聚屏广告AdSDK接入文档V1.5.0](#百度聚屏广告AdSDK接入文档V1.5.0)
       * [产品介绍](#产品介绍)
       * [SDK接入须知](#sdk接入须知)
          * [接入设备性能要求](#接入设备性能要求)
@@ -136,7 +136,7 @@ dependencies {
     // 请求SDK
     implementation (name: 'libtianjiadsdk-release-vxxx', ext: 'aar')
     // 内部库
-    implementation "com.baidu.adsdk:saferequest:1.2.x.x"
+    implementation "com.baidu.adsdk:saferequest:1.5.x.x"
     // glide
     implementation("com.github.bumptech.glide:glide:4.8.0") {
         exclude group: 'com.android.support'
@@ -272,7 +272,8 @@ if (Build.VERSION.SDK_INT > 23) {
     android:layout_height="match_parent"
     tools:context=".activitys.GalleryViewActivity">
 
-    <com.baidu.adsdk.view.BDGalleryView
+    // 如果之前使用的是BDGalleryView，可以直接替换成BDGLGalleryView
+    <com.baidu.adsdk.view.BDGLGalleryView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 	// 设置是否自动模式，如果这里填false，则必须使用手动代码方式来控制广告请求与播放。
@@ -303,87 +304,179 @@ public class ManualActivity extends AppCompatActivity {
     /**
      * 视频广告组件
      */
-    BDVideoView videoView;
+    private BDGLVideoView videoView;
     /**
      * 视频广告控制器
      */
-    IController videoController;
+    private IController videoController;
 
     /**
      * 图片广告组件
      */
-    BDGalleryView galleryView;
+    private BDGLGalleryView galleryView;
     /**
      * 图片广告控制器
      */
-    IController galController;
+    private IController galController;
 
     /**
      * 图片广告组件监听器
      */
-    private GalListener galListener = new GalListener();
+    private GalListener galListener = new GalListener(this);
 
     /**
      * 视频广告组件监听器
      */
-    private VideoListener videoListener = new VideoListener();
+    private VideoListener videoListener = new VideoListener(this);
 
-    class VideoListener extends DefaultAdListener {
+    static class VideoListener extends DefaultAdListener {
+        WeakReference<ManualActivity> manualActivityWeakReference;
+
+        VideoListener(ManualActivity activity) {
+            manualActivityWeakReference = new WeakReference<>(activity);
+        }
+
         @Override
         public void onAdPrepared(@NotNull RequestInfo info) {
             // 收到视频广告准备OK的时候，可以自己做些业务逻辑，
             // 这个例子是将图片组件隐藏，显示视频组件，然后调用showAd接口
-            videoView.setVisibility(View.VISIBLE);
-            galleryView.setVisibility(View.INVISIBLE);
-            videoController.showAd();
+            ManualActivity manualActivity = manualActivityWeakReference.get();
+            if (manualActivity != null) {
+
+                ViewGroup.LayoutParams layoutParams = manualActivity.galleryView.getLayoutParams();
+                layoutParams.height = 1;
+                layoutParams.width = 1;
+                manualActivity.galleryView.setLayoutParams(layoutParams);
+                manualActivity.galleryView.setVisibility(View.INVISIBLE);
+
+                ViewGroup.LayoutParams layoutParams1 = manualActivity.videoView.getLayoutParams();
+                layoutParams1.width = RelativeLayout.LayoutParams.MATCH_PARENT;
+                layoutParams1.height = RelativeLayout.LayoutParams.MATCH_PARENT;
+                manualActivity.videoView.setLayoutParams(layoutParams1);
+                manualActivity.videoView.setVisibility(View.VISIBLE);
+
+                manualActivity.videoController.showAd();
+            }
+
         }
 
         @Override
         public void onAdFailed(@NotNull RequestInfo info, int ec, @NotNull String msg) {
             // 当广告播放失败回调，这个例子在播放视频广告失败的时候继续请求视频广告
-	    // 延迟1s，避免快速失败又快速请求刷屏
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    videoController.loadAdAsync();
-                }
-            }, 1000);
+            Log.d("qwe123", "receive AdFailed");
+            ManualActivity manualActivity = manualActivityWeakReference.get();
+            if (manualActivity != null) {
+                manualActivity.handler.postDelayed(new VideoLoadRunnable(manualActivity), 1000);
+            }
+
         }
 
         @Override
         public void onAdFinish(@NotNull RequestInfo requestInfo) {
             // 当广告完成时回调，这个例子在播放视频广告播放完成的时候请求图片广告
-            galController.loadAdAsync();
+            ManualActivity manualActivity = manualActivityWeakReference.get();
+            if (manualActivity != null) {
+                manualActivity.galController.loadAdAsync();
+                // 最后一帧显示黑屏的功能，可要可不要
+                manualActivity.videoView.getController().setLastFrameBlack();
+            }
         }
     }
 
-    class GalListener extends DefaultAdListener {
+    static class VideoLoadRunnable implements Runnable {
+        WeakReference<ManualActivity> manualActivityWeakReference;
+
+        VideoLoadRunnable(ManualActivity activity) {
+            manualActivityWeakReference = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void run() {
+            ManualActivity activity = manualActivityWeakReference.get();
+            if (activity != null) {
+                activity.videoController.loadAdAsync();
+            }
+        }
+    }
+
+    static class GalLoadRunnable implements Runnable {
+        WeakReference<ManualActivity> manualActivityWeakReference;
+
+        GalLoadRunnable(ManualActivity activity) {
+            manualActivityWeakReference = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void run() {
+            ManualActivity activity = manualActivityWeakReference.get();
+            if (activity != null) {
+                activity.galController.loadAdAsync();
+            }
+        }
+    }
+
+    static class GalListener extends DefaultAdListener {
+        WeakReference<ManualActivity> manualActivityWeakReference;
+
+        GalListener(ManualActivity activity) {
+            manualActivityWeakReference = new WeakReference<>(activity);
+        }
+
         @Override
         public void onAdPrepared(@NotNull RequestInfo info) {
             // 收到图片广告准备OK的时候，可以自己做些业务逻辑，
             // 这个例子是将视频组件隐藏，显示图片组件，然后调用showAd接口
-            videoView.setVisibility(View.INVISIBLE);
-            galleryView.setVisibility(View.VISIBLE);
-            galController.showAd();
+            ManualActivity manualActivity = manualActivityWeakReference.get();
+            if (manualActivity != null) {
+//                manualActivity.videoView.setVisibility(View.GONE);
+                ViewGroup.LayoutParams layoutParams1 = manualActivity.videoView.getLayoutParams();
+                layoutParams1.width = 1;
+                layoutParams1.height = 1;
+                manualActivity.videoView.setLayoutParams(layoutParams1);
+                manualActivity.videoView.setVisibility(View.INVISIBLE);
+
+                ViewGroup.LayoutParams layoutParams = manualActivity.galleryView.getLayoutParams();
+                layoutParams.height = RelativeLayout.LayoutParams.MATCH_PARENT;
+                layoutParams.width = RelativeLayout.LayoutParams.MATCH_PARENT;
+                manualActivity.galleryView.setLayoutParams(layoutParams);
+                manualActivity.galleryView.setVisibility(View.VISIBLE);
+
+                manualActivity.galController.showAd();
+            }
         }
+
 
         @Override
         public void onAdFailed(@NotNull RequestInfo info, int ec, @NotNull String msg) {
+            Log.d("qwe123", "receive AdFailed");
             // 当图片广告播放失败回调，这个例子在图片广告失败再请求图片广告
-	    // 延迟1秒，避免快速失败又快速请求刷屏
-	    handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    galController.loadAdAsync();
-                }
-            }, 1000);
+            ManualActivity manualActivity = manualActivityWeakReference.get();
+            if (manualActivity != null) {
+                manualActivity.handler.postDelayed(new GalLoadRunnable(manualActivity), 1000);
+            }
         }
 
         @Override
         public void onAdFinish(@NotNull RequestInfo requestInfo) {
             // 当图片广告播放完成回调，这个例子在图片广告播放完成请求视频广告
-            videoController.loadAdAsync();
+            ManualActivity manualActivity = manualActivityWeakReference.get();
+            if (manualActivity != null) {
+                manualActivity.videoController.loadAdAsync();
+                manualActivity.galleryView.getController().setLastFrameBlack();
+            }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        videoController.removeAdListener(videoListener);
+        galController.removeAdListener(galListener);
+
+        handler.removeCallbacksAndMessages(null);
+        videoController.releaseAd();
+        galController.releaseAd();
     }
 
     @Override
@@ -403,18 +496,12 @@ public class ManualActivity extends AppCompatActivity {
         // 初始化视频组件，设置监听器
         videoController = videoView.getController();
         // 你可以通过setSlotid设置广告位id，也可以通过xml中设置
-        videoController.setSlotid("Jy0FoE5qy");
+        videoController.setSlotid("XXXX");
         videoController.addAdListener(videoListener);
 
         // 发起视频组件的广告请求
         videoController.loadAdAsync();
-    }
-    
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        videoController.releaseAd();
-        galController.releaseAd();
+
     }
 
     /**
@@ -452,7 +539,6 @@ public class ManualActivity extends AppCompatActivity {
         }
     }
 }
-
 ```
 ## 相关接口介绍
 
