@@ -59,16 +59,19 @@
 ## 版本更新说明
 ### 1.5.0版本：
    1.使用BDGLGalleryView替换1.2版本的BDGalleryView；
+   
    2.缓存路径设置：之前是默认在/data/包名下/cache/目录，1.5版本后需要用户在初始化SDK时手动调用：
    ```
-   // 设置缓存路径，第二个参数为缓存路径，如果不设置，默认为/data/包名/下cache目录，第三个参数为缓存最长保留时间，单位为天。7天代表缓存目录下7天以前的广告会被清除，如果不设置，默认为3.
+   // 设置缓存路径，第二个参数为缓存路径，如果不设置，默认为/data/包名/下cache目录，
+   // 第三个参数为缓存最长保留时间，单位为天。7天代表缓存目录下7天以前的广告会被清除，如果不设置，默认为3.
     AdWrapper.INSTANCE.setCacheDir(this, "/sdcard/test_media/", 7);
    ```
    3.新加了两个接口：
    ```
-   // 非必须，播放完后最后一帧是否需要设置黑屏，通常在onAdFinish回调处调用，调用了会让最后一帧设置为黑屏
+   // 非必须，播放完后最后一帧是否需要设置黑屏，通常在onAdFinish回调处调用，调用了会让最后一帧显示为黑屏
    fun setLastFrameBlack()
-   // 非必须，这个接口只针对视频组件有效，onAdPrepared回调后代表广告已经下载好，此时调用这个接口可以让播放器提前去prepare这个广告。减少showAd需要准备广告的事件。
+   // 非必须，这个接口只针对视频组件有效，onAdPrepared回调后代表广告已经下载好，
+   // 此时调用这个接口可以让播放器提前去prepare这个广告。减少showAd需要准备广告的事件。
    fun prepareAd()
    ```
    
@@ -273,7 +276,7 @@ if (Build.VERSION.SDK_INT > 23) {
 	// 设置是否自动模式，如果这里填false，则必须使用手动代码方式来控制广告请求与播放。
         app:auto="true"
 	// 设置视频广告位id
-        app:slotid="Jy0FoE5qy" />
+        app:slotid="XXXX" />
 </android.support.constraint.ConstraintLayout>
 ```
 接入后，视频组件将会一直持续播放，并自动请求广告。
@@ -296,7 +299,7 @@ if (Build.VERSION.SDK_INT > 23) {
 	// 设置是否自动模式，如果这里填false，则必须使用手动代码方式来控制广告请求与播放。
         app:auto="true"
 	// 设置图片广告位id
-        app:slotid="6660001" />
+        app:slotid="XXXXX" />
 </LinearLayout>
 ```
 
@@ -445,7 +448,6 @@ public class ManualActivity extends AppCompatActivity {
             // 这个例子是将视频组件隐藏，显示图片组件，然后调用showAd接口
             ManualActivity manualActivity = manualActivityWeakReference.get();
             if (manualActivity != null) {
-//                manualActivity.videoView.setVisibility(View.GONE);
                 ViewGroup.LayoutParams layoutParams1 = manualActivity.videoView.getLayoutParams();
                 layoutParams1.width = 1;
                 layoutParams1.height = 1;
@@ -603,6 +605,12 @@ public class ManualActivity extends AppCompatActivity {
 * fun stopAd(skip: Boolean)，**非必须调用**，skip代表下次播放时是否需要跳过当前被停止的广告，一般传false即可。
 * 此函数调用完以后下次会重新开始播放素材。
 
+#### 设置最后一帧为黑屏setLastFrameBlack
+* 非必须调用，设置最后一帧为黑屏setLastFrameBlack(),播放完后最后一帧是否需要设置黑屏，通常在onAdFinish回调处调用，调用了会让最后一帧显示为黑屏.
+
+#### 让播放器提前去准备广告prepareAd
+* 非必须调用，这个接口只针对视频组件有效，onAdPrepared回调后代表广告已经下载好，此时调用这个接口可以让播放器提前去prepare这个广告。减少showAd需要准备广告的事件。
+
 #### 预先请求多个广告preLoadMoreAds
 * fun preLoadMoreAds(maxReqNums: Int, needAds: Int, callback: IPreLoadAdProgress)方法。非必须调用。参数1 maxReqNums: 这次任务的最大请求数；参数2 needAds: 这次任务需要下载的广告数，为避免计费串失效，最大为4；参数3 callback: 这次任务的请求过程的回调,如下,参数意义为第几个请求，是否成功，错误码，请求信息
 
@@ -625,7 +633,7 @@ interface IPreLoadAdProgress {
 
 #### 返回当前的播放组件getAdView
 * fun getAdView(): View，非必须调用。
-#### 截图captureAsync
+#### 截图captureAsync(已弃用)
 * fun captureAsync(c: (bitmap: Bitmap?) -> Unit) ，非必须调用。参数1是一个函数类型，参数为Bitmap，返回值为空。
 * 返回正在播放的广告的Bitmap，返回后需要自行回收！
 #### 播放本地素材playLocalMedia
