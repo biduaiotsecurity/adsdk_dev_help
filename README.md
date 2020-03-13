@@ -992,13 +992,16 @@ retCode 为 0x01 包名或者md5不匹配
 
 * 5) Q: VerifyError kotlin/UByte
 * A： 需要调整gradle和gradle plugin的版本
-      工程根目录/build.gradle
+      
+   工程根目录/build.gradle
+      
       buildscript {
           dependencies {
 	      classpath 'com.android.tools.build:gradle:3.4.1' // 要求不低于此版本
 	  }
       }
       
-      文件gradle-wrapper.properties
+     gradle-wrapper.properties
+     
       distributionUrl=https\://services.gradle.org/distributions/gradle-5.1.1-all.zip
-      同样要求不低于此版本
+     同样要求不低于此版本
