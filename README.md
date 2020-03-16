@@ -95,8 +95,8 @@ SDK接入前，需提前准备以下参数：
    * 若接入设备的广告类型为户外，则需准备该字段，该字段需保证唯一性且已在聚屏平台注册；
    * 若接入设备的广告类型为OTT或开屏广告，则可以填写为null。
 * channel：渠道名，一般在交付邮件中将会列出；
-* lbsapi.API_KEY：百度定位SDK的KEY，需要在地图SDK后台自行创建
-（http://lbsyun.baidu.com/apiconsole/key）
+* lbsapi.API_KEY：百度定位SDK的KEY，需要在地图SDK后台自行创建.*请务必保证*：在程序中引入百度地图定位SDK v4.0以上版本（http://lbsyun.baidu.com/index.php?title=android-locsdk
+）。
 * BDAI_FACE_LICENSE:百度人脸SDK的授权License，需要在人脸SDK后台自行创建
  (https://cloud.baidu.com/product/imagerecognition 目前支持批量授权License)
 
