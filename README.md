@@ -42,7 +42,7 @@
 	    * [让播放器提前去准备广告prepareAd](#让播放器提前去准备广告prepareAd)
 	    * [设置最后一帧为黑屏setLastFrameBlack](#设置最后一帧为黑屏setLastFrameBlack)
 	    * [设置组件的可见性setViewVisibility](#设置组件的可见性setViewVisibility)
-	    * [设置组件的Z-order:setZOrderOnTop](#设置组件的Z-order:setZOrderOnTop)
+	    * [设置组件的Z-order](#设置组件的Z-order)
             * [播放本地素材playLocalMedia](#播放本地素材playlocalmedia)
             * [监播回调setMonitorCallback](#监播回调setmonitorcallback)
          * [自定义播放器接口](#自定义播放器接口)
@@ -604,7 +604,7 @@ public class ManualActivity extends AppCompatActivity {
 #### 设置组件的可见性setViewVisibility
 * 非必须调用，设置我们组件的可见性。
 
-#### 设置组件的Z-order:setZOrderOnTop
+#### 设置组件的Z-order
 * 非必须调用，设置组件的Z-order，详情可见SurfaceView的setZOrderOnTop
 
 #### 设置组件的Z-order:setZOrderMediaOverlay
