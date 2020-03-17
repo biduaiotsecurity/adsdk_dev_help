@@ -311,7 +311,7 @@ if (Build.VERSION.SDK_INT > 23) {
 这个例子主要是演示了几个接口如何使用。
 ```javascript { .theme-peacock }
 /**
- * 自己控制广告流
+ * 自己控制广告流,布局就是一个RelativeLayout，加上宽高都是MATCH_PARENT的视频和图片组件
  */
 public class ManualActivity extends AppCompatActivity {
 
@@ -363,17 +363,8 @@ public class ManualActivity extends AppCompatActivity {
             ManualActivity manualActivity = manualActivityWeakReference.get();
             if (manualActivity != null) {
 
-                ViewGroup.LayoutParams layoutParams = manualActivity.galleryView.getLayoutParams();
-                layoutParams.height = 1;
-                layoutParams.width = 1;
-                manualActivity.galleryView.setLayoutParams(layoutParams);
-                manualActivity.galleryView.setVisibility(View.INVISIBLE);
-
-                ViewGroup.LayoutParams layoutParams1 = manualActivity.videoView.getLayoutParams();
-                layoutParams1.width = RelativeLayout.LayoutParams.MATCH_PARENT;
-                layoutParams1.height = RelativeLayout.LayoutParams.MATCH_PARENT;
-                manualActivity.videoView.setLayoutParams(layoutParams1);
-                manualActivity.videoView.setVisibility(View.VISIBLE);
+                manualActivity.galController.setViewVisibility(View.INVISIBLE);
+                manualActivity.videoController.setViewVisibility(View.VISIBLE);
 
                 manualActivity.videoController.showAd();
             }
@@ -448,18 +439,10 @@ public class ManualActivity extends AppCompatActivity {
             // 这个例子是将视频组件隐藏，显示图片组件，然后调用showAd接口
             ManualActivity manualActivity = manualActivityWeakReference.get();
             if (manualActivity != null) {
-                ViewGroup.LayoutParams layoutParams1 = manualActivity.videoView.getLayoutParams();
-                layoutParams1.width = 1;
-                layoutParams1.height = 1;
-                manualActivity.videoView.setLayoutParams(layoutParams1);
-                manualActivity.videoView.setVisibility(View.INVISIBLE);
 
-                ViewGroup.LayoutParams layoutParams = manualActivity.galleryView.getLayoutParams();
-                layoutParams.height = RelativeLayout.LayoutParams.MATCH_PARENT;
-                layoutParams.width = RelativeLayout.LayoutParams.MATCH_PARENT;
-                manualActivity.galleryView.setLayoutParams(layoutParams);
-                manualActivity.galleryView.setVisibility(View.VISIBLE);
-
+		manualActivity.videoController.setViewVisibility(View.INVISIBLE);
+                manualActivity.galController.setViewVisibility(View.VISIBLE);
+		
                 manualActivity.galController.showAd();
             }
         }
@@ -604,6 +587,15 @@ public class ManualActivity extends AppCompatActivity {
 #### 停止播放接口stopAd
 * fun stopAd(skip: Boolean)，**非必须调用**，skip代表下次播放时是否需要跳过当前被停止的广告，一般传false即可。
 * 此函数调用完以后下次会重新开始播放素材。
+
+#### 设置view的可见性setViewVisibility
+* 非必须调用，设置我们组件的可见性。
+
+#### 设置组件的Z-order:setZOrderOnTop
+* 非必须调用，设置组件的Z-order，详情可见SurfaceView的setZOrderOnTop
+
+#### 设置组件的Z-order:setZOrderMediaOverlay
+* 非必须调用，设置组件的Z-order，详情可见SurfaceView的setZOrderMediaOverlay
 
 #### 设置最后一帧为黑屏setLastFrameBlack
 * 非必须调用，设置最后一帧为黑屏setLastFrameBlack(),播放完后最后一帧是否需要设置黑屏，通常在onAdFinish回调处调用，调用了会让最后一帧显示为黑屏.
