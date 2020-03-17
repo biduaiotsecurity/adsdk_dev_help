@@ -1,6 +1,6 @@
-# 百度聚屏广告AdSDK接入文档V1.5.0
+# 百度聚屏广告AdSDK接入文档V1.5.1
 
-   * [百度聚屏广告AdSDK接入文档V1.5.0](#百度聚屏广告AdSDK接入文档V1.5.0)
+   * [百度聚屏广告AdSDK接入文档V1.5.1](#百度聚屏广告AdSDK接入文档V1.5.1)
       * [产品介绍](#产品介绍)
       * [版本更新说明](#版本更新说明)
       * [SDK接入须知](#sdk接入须知)
@@ -39,6 +39,10 @@
             * [预先请求多个广告preLoadMoreAds](#预先请求多个广告preloadmoreads)
             * [返回当前的播放组件getAdView](#返回当前的播放组件getadview)
             * [截图captureAsync](#截图captureasync)
+	    * [让播放器提前去准备广告prepareAd](#让播放器提前去准备广告prepareAd)
+	    * [设置最后一帧为黑屏setLastFrameBlack](#设置最后一帧为黑屏setLastFrameBlack)
+	    * [设置组件的可见性setViewVisibility](#设置组件的可见性setViewVisibility)
+	    * [设置组件的Z-order:setZOrderOnTop](#设置组件的Z-order:setZOrderOnTop)
             * [播放本地素材playLocalMedia](#播放本地素材playlocalmedia)
             * [监播回调setMonitorCallback](#监播回调setmonitorcallback)
          * [自定义播放器接口](#自定义播放器接口)
@@ -57,7 +61,7 @@
 百度聚屏广告SDK，合入了百度安全监播端-云一体方案，端上通过自有安全播放器、广告安全校验等技术，保障端上播放行为安全可控；云上通过自研安全算法、区块链等技术，从播放可信、设备可信、数据可信3个维度，保障广告播放行为真实可信；同时，SDK内置广告播放器具备高兼容性，支持高清流畅播放mp4、jpg等主流图片/视频广告格式。通过以上核心能力，可从端到云，全面保障媒体广告播放的真实性、安全性和流畅性。
 
 ## 版本更新说明
-### 1.5.0版本：
+### 1.5.1版本：
    1.使用BDGLGalleryView替换1.2版本的BDGalleryView；
    
    2.缓存路径设置：之前是默认在/data/包名下/cache/目录，1.5版本后需要用户在初始化SDK时手动调用：
@@ -74,6 +78,15 @@
    // 此时调用这个接口可以让播放器提前去prepare这个广告。减少showAd需要准备广告的事件。
    fun prepareAd()
    ```
+   
+   4.新加了二合一的View:BDTwoInOneView
+   主要用在二合一的广告位ID上。
+   
+   5.新加了控制组件可见性的接口：setViewVisibility，用法和view.setVisibility一样
+   
+   6.新加了控制组件Z-order的接口：setZOrderOnTop和setZOrderMediaOverlay，用法和SurfaceView一样
+  
+  
    
 ## SDK接入须知
 ### 接入设备性能要求
@@ -588,7 +601,7 @@ public class ManualActivity extends AppCompatActivity {
 * fun stopAd(skip: Boolean)，**非必须调用**，skip代表下次播放时是否需要跳过当前被停止的广告，一般传false即可。
 * 此函数调用完以后下次会重新开始播放素材。
 
-#### 设置view的可见性setViewVisibility
+#### 设置组件的可见性setViewVisibility
 * 非必须调用，设置我们组件的可见性。
 
 #### 设置组件的Z-order:setZOrderOnTop
