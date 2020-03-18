@@ -22,6 +22,7 @@
             * [视频组件](#视频组件)
             * [图片轮播组件](#图片轮播组件)
          * [代码示例，媒体方自己通过代码控制广告请求与播放](#代码示例媒体方自己通过代码控制广告请求与播放)
+	 * [BDTwoInOneView代码示例](#BDTwoInOneView代码示例)
       * [相关接口介绍](#相关接口介绍)
          * [广告播放回调接口(IAdListener, package com.baidu.adsdk.interfaces)](#广告播放回调接口iadlistener-package-combaiduadsdkinterfaces)
          * [关于IController](#关于icontroller)
@@ -555,6 +556,149 @@ public class ManualActivity extends AppCompatActivity {
     }
 }
 ```
+
+### BDTwoInOneView代码示例
+```
+/**
+ * 二合一组件代码示例
+ */
+public class ManualTwoInOneActivity extends AppCompatActivity {
+
+    Handler handler = new Handler();
+
+    {
+        AdWrapper.INSTANCE.onActivityInit(this);
+    }
+
+    /**
+     * 广告组件
+     */
+    private BDTwoInOneView twoInOneView;
+    /**
+     * 广告控制器
+     */
+    private IController twoInOneController;
+
+    private TwoInOneListener twoInOneListener = new TwoInOneListener(this);
+
+    static class TwoInOneListener extends DefaultAdListener {
+        WeakReference<ManualTwoInOneActivity> manualActivityWeakReference;
+
+        TwoInOneListener(ManualTwoInOneActivity activity) {
+            manualActivityWeakReference = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void onAdPrepared(@NotNull RequestInfo info) {
+            ManualTwoInOneActivity manualActivity = manualActivityWeakReference.get();
+            if (manualActivity != null) {
+                manualActivity.twoInOneController.showAd();
+            }
+        }
+
+        @Override
+        public void onAdFailed(@NotNull RequestInfo info, int ec, @NotNull String msg) {
+            // 当广告播放失败回调，这个例子在播放视频广告失败的时候继续请求视频广告
+            Log.d("qwe123", "receive AdFailed");
+            ManualTwoInOneActivity manualActivity = manualActivityWeakReference.get();
+            if (manualActivity != null) {
+                manualActivity.handler.postDelayed(new VideoLoadRunnable(manualActivity), 1000);
+            }
+
+        }
+
+        @Override
+        public void onAdFinish(@NotNull RequestInfo requestInfo) {
+            // 当广告完成时回调，这个例子在播放视频广告播放完成的时候请求图片广告
+            ManualTwoInOneActivity manualActivity = manualActivityWeakReference.get();
+            if (manualActivity != null) {
+//                manualActivity.videoView.setTopLayout(false);
+                manualActivity.twoInOneController.loadAdAsync();
+                // 最后一帧显示黑屏的功能，可要可不要
+                manualActivity.twoInOneView.getController().setLastFrameBlack();
+            }
+        }
+    }
+
+    static class VideoLoadRunnable implements Runnable {
+        WeakReference<ManualTwoInOneActivity> manualActivityWeakReference;
+
+        VideoLoadRunnable(ManualTwoInOneActivity activity) {
+            manualActivityWeakReference = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void run() {
+            ManualTwoInOneActivity activity = manualActivityWeakReference.get();
+            if (activity != null) {
+                activity.twoInOneController.loadAdAsync();
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        twoInOneController.removeAdListener(twoInOneListener);
+        handler.removeCallbacksAndMessages(null);
+        twoInOneController.releaseAd();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_twoinone_manual);
+
+        // 我们这个例子是再xml中布局视频与图片组件，
+        // 你同样也可以在代码中使用LayoutParams布局
+        twoInOneView = findViewById(R.id.bdtwo_in_one_view);
+
+        // 初始化二合一组件，设置监听器
+        twoInOneController = twoInOneView.getController();
+        twoInOneController.addAdListener(twoInOneListener);
+
+        // 发起广告请求
+        twoInOneController.loadAdAsync();
+    }
+
+    /**
+     * 提供一个骨架方法，业务方不需要重写每个回调时使用。仅为降低代码冗余度
+     */
+    public static class DefaultAdListener implements IAdListener {
+        @Override
+        public void onAdPrepared(@NotNull RequestInfo info) {
+
+        }
+
+        @Override
+        public void onAdStart() {
+
+        }
+
+        @Override
+        public void onAdFailed(@NotNull RequestInfo info, int ec, @NotNull String msg) {
+
+        }
+
+        @Override
+        public void onAdClick() {
+
+        }
+
+        @Override
+        public void onAdFinish(@NotNull RequestInfo info) {
+
+        }
+
+        @Override
+        public void onAdDismissed() {
+
+        }
+    }
+}
+
+```
+
 ## 相关接口介绍
 
 ### 广告播放回调接口(IAdListener, package com.baidu.adsdk.interfaces)
