@@ -794,6 +794,14 @@ interface IPreLoadAdProgress {
 * fun setMonitorCallback(callback: IMonitorCallback)，播放过程中会回调监播是否成功。
 * IMonitorCallback里面的方法：fun result(info: RequestInfo?, suc: Boolean, code: Int, errMsg: String) ，参数1代表此次播放素材的info，参数2代表监播是否成功.
 
+code:参数有以下几个值：
+    const val SUCCESS = 0
+    const val MONITOR_NOT_ADTA = -300
+    const val MONITOR_ALREADY = -301
+    const val MONITOR_CPAPTURE_NULL = -302
+
+* 其中MONITOR_ALREADY代表这个广告已经监播过，已经监播过的广告，suc也为true.
+
 ### 自定义播放器接口
 功能非必须，扩展类接口，SDK默认使用系统播放器，也支持第三方的播放器，但需要实现如下两个接口：
 
