@@ -1028,6 +1028,7 @@ retCode 为 0x01 包名或者md5不匹配
 
 |错误码| 定义| 解释|  
 |----|----|----|  
+|100003|----|加解密失败| 
 |104000| MISSING_DEVICE_INFO| 设备信息缺失|  
 |104010| MISSING_DEVICE_TYPE| 设备类型信息缺失|  
 |104011| ERROR_DEVICE_TYPE| 设备类型信息错误|  
