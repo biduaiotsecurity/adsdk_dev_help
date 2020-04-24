@@ -795,18 +795,20 @@ interface ICaptureResult {
 }
 ``` 
  参数1 code表示回调结果:除了SUCCESS其他都代表失败。
+```
     const val SUCCESS = 0
     const val CAPTURE_BLACK_ERROR = -1
     const val JPEG_ERROR = -2
     const val PARAM_FILENAME_INVALID = -3
     const val PARAM_QUALITY_INVALID = -4
     const val PLAY_BLACK_ERROR = -5
+```
  参数2 errMsg代表错误信息，成功时为空。
  参数3 filePath就是一开始调用captureAsync传进来的参数而已。
 
 #### 播放本地素材playLocalMedia
 * fun playLocalMedia(file: File, url: String, md5: String = "",
-                       rotation: Float = 0f, duration: Int = 0)，非必须调用。参数1是本地素材的File，参数2代表这个素材的url，可填空字符串；参数3代表这个素材的md5，如果不填或填空字符串，sdk内部会自行计算素材的md5；参数4代表旋转角度，取值范围是-180°~180°，比如90°，代表顺时针旋转90度；参数5代表广告播放时长，单位是秒。
+                       rotation: Float = 0f, duration: Int = 0, adtype: Int = AdType.IMAGE)，非必须调用。参数1是本地素材的File，参数2代表这个素材的url，可填空字符串；参数3代表这个素材的md5，如果不填或填空字符串，sdk内部会自行计算素材的md5；参数4代表旋转角度，取值范围是-180°~180°，比如90°，代表顺时针旋转90度；参数5代表广告播放时长，单位是秒。参数5代表播放类型，默认是IMAGE，有两种，视频是AdType.VIDEO，图片是AdType.IMAGE。
 * 一般媒体不需要调用这个函数。
 
 #### 监播回调setMonitorCallback
