@@ -1151,7 +1151,7 @@ retCode 为 0x01 包名或者md5不匹配
 
 ### Q&A（持续更新）
 * 1）Q：Unable to resolve dependency for XXX Could not download safehttp.aar (com.baidu.safehttp:safehttp:1.0.29)
-* A：到https://bintray.com/bdaiotsecurity 或者咨询相应的开发人员获取aidl-1.0.0、safehttp-1.0.13以及saferequest-1.2.1.3等aar包。
+* **A**：到https://bintray.com/bdaiotsecurity 或者咨询相应的开发人员获取aidl-1.0.0、safehttp-1.0.13以及saferequest-1.2.1.3等aar包。
 ```c
 并且替换
     implementation "com.baidu.adsdk:saferequest:1.2.1.3"
@@ -1162,17 +1162,17 @@ retCode 为 0x01 包名或者md5不匹配
 ```
 
 * 2)Q: protubuf和宿主版本不一致导致编译失败。
-* A: SDK版本用的是protubuf3.0，会用到一些新特性，但是也向下兼容，宿主版本如果之前用的是3.0以下的，先clean一下工程，把之前protubuf自动生成的代码先清掉，再用3.0重新编译即可。
+* **A**: SDK版本用的是protubuf3.0，会用到一些新特性，但是也向下兼容，宿主版本如果之前用的是3.0以下的，先clean一下工程，把之前protubuf自动生成的代码先清掉，再用3.0重新编译即可。
 
 * 3)Q: 使用BDGalleryView崩溃，抛出NoXXXFoundException。
-* A: 这个是因为宿主用的Glide版本和SDK不一致导致的，Glide版本间差异会比较大，不同版本引入的新特性不一定能兼容。
+* **A**: 这个是因为宿主用的Glide版本和SDK不一致导致的，Glide版本间差异会比较大，不同版本引入的新特性不一定能兼容。
 
 * 4)Q: NullPointerException异常，并且堆栈在：EncryptUtilWrapper的。
-* A： 看下app的Manifest文件中Application节点中是否加入了:process属性。
+* **A**： 看下app的Manifest文件中Application节点中是否加入了:process属性。
       一定要在application onCreate中调用我们sdk。
 
 * 5)Q: VerifyError kotlin/UByte
-* A： 需要调整gradle和gradle plugin的版本
+* **A**： 需要调整gradle和gradle plugin的版本
       
    工程根目录/build.gradle
       
@@ -1188,9 +1188,9 @@ retCode 为 0x01 包名或者md5不匹配
      同样要求不低于此版本
 
 * 6)Q:播放出现黑屏
-* A: 出现黑屏大概有几个原因：
+* **A**: 出现黑屏大概有几个原因：
      ①两个单独的播放组件在做切换时没有调用controller.setViewVisibility去控制组件的显示和隐藏；
      ②宿主控制组件的时候，调用了removeView等相关的操作，此类操作会导致组件的onDetachFromWindow被回调，EGLContext被销毁，渲染的线程停止，无法再恢复，相当于整个组件被废弃。(一般会出现"invalid EGL"字样的日志)
      
 * 7）Q:UnstaticLinkedError等一些Native方法找不到的错误。
-  A: SDK只提供了armeabi-v7a和armeabi-v8a两种架构的库，出现这种问题可能是宿主存在armeabi的架构。
+* **A**: SDK只提供了armeabi-v7a和armeabi-v8a两种架构的库，出现这种问题可能是宿主存在armeabi的架构。
