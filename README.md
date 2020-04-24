@@ -1165,3 +1165,10 @@ retCode 为 0x01 包名或者md5不匹配
      
       distributionUrl=https\://services.gradle.org/distributions/gradle-5.1.1-all.zip
      同样要求不低于此版本
+
+* 6) Q:播放出现黑屏
+* A: 出现黑屏大概有几个原因：
+     ①两个单独的播放组件在做切换时没有调用controller.setViewVisibility去控制组件的显示和隐藏；
+     ②宿主控制组件的时候，调用了removeView等相关的操作，此类操作会导致组件的onDetachFromWindow被回调，EGLContext被销毁，渲染的线程停止，无法再恢复，相当于整个组件被废弃。(一般会出现"invalid EGL"字样的日志)
+     
+
