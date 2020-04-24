@@ -39,7 +39,7 @@
             * [停止播放接口stopAd](#停止播放接口stopad)
             * [预先请求多个广告preLoadMoreAds](#预先请求多个广告preloadmoreads)
             * [返回当前的播放组件getAdView](#返回当前的播放组件getadview)
-            * [截图captureAsync](#截图captureasync)
+            * [截图captureAsync](#截图captureAsync)
 	    * [让播放器提前去准备广告prepareAd](#让播放器提前去准备广告prepareAd)
 	    * [设置最后一帧为黑屏setLastFrameBlack](#设置最后一帧为黑屏setLastFrameBlack)
 	    * [设置组件的可见性setViewVisibility](#设置组件的可见性setViewVisibility)
@@ -47,10 +47,10 @@
             * [播放本地素材playLocalMedia](#播放本地素材playlocalmedia)
             * [监播回调setMonitorCallback](#监播回调setmonitorcallback)
             * [自定义播放器接口](#自定义播放器接口)
-            * [使用方法：](#使用方法)
+               * [使用方法：](#使用方法)
             * [请求第三方广告](#请求第三方广告)
-            * [请求广告](#请求广告)
-            * [计费](#计费)
+               * [请求广告](#请求广告)
+               * [计费](#计费)
       * [SDK使用环境限制](#sdk使用环境限制)
       * [附录](#附录)
          * [时序图](#时序图)
@@ -782,9 +782,28 @@ interface IPreLoadAdProgress {
 
 #### 返回当前的播放组件getAdView
 * fun getAdView(): View，非必须调用。
-#### 截图captureAsync(已弃用)
-* fun captureAsync(c: (bitmap: Bitmap?) -> Unit) ，非必须调用。参数1是一个函数类型，参数为Bitmap，返回值为空。
-* 返回正在播放的广告的Bitmap，返回后需要自行回收！
+#### 截图captureAsync
+* fun captureAsync(c: (bitmap: Bitmap?) -> Unit) ，此方法已弃用，请使用下面这个方法去截图：
+  fun captureAsync(filePath: String, quality: Int, callback: ICaptureResult)
+  参数介绍：filePath，截图文件存储的路径，文件名最好以.jpg结尾，quality是压缩质量，0~100，100代表不压缩，callback是截屏结果的回调。
+* ICaptureResult介绍：
+```
+interface ICaptureResult {
+
+    fun result(code: Int, errMsg: String, filePath: String)
+
+}
+``` 
+ 参数1 code表示回调结果:除了SUCCESS其他都代表失败。
+    const val SUCCESS = 0
+    const val CAPTURE_BLACK_ERROR = -1
+    const val JPEG_ERROR = -2
+    const val PARAM_FILENAME_INVALID = -3
+    const val PARAM_QUALITY_INVALID = -4
+    const val PLAY_BLACK_ERROR = -5
+ 参数2 errMsg代表错误信息，成功时为空。
+ 参数3 filePath就是一开始调用captureAsync传进来的参数而已。
+
 #### 播放本地素材playLocalMedia
 * fun playLocalMedia(file: File, url: String, md5: String = "",
                        rotation: Float = 0f, duration: Int = 0)，非必须调用。参数1是本地素材的File，参数2代表这个素材的url，可填空字符串；参数3代表这个素材的md5，如果不填或填空字符串，sdk内部会自行计算素材的md5；参数4代表旋转角度，取值范围是-180°~180°，比如90°，代表顺时针旋转90度；参数5代表广告播放时长，单位是秒。
@@ -1171,4 +1190,5 @@ retCode 为 0x01 包名或者md5不匹配
      ①两个单独的播放组件在做切换时没有调用controller.setViewVisibility去控制组件的显示和隐藏；
      ②宿主控制组件的时候，调用了removeView等相关的操作，此类操作会导致组件的onDetachFromWindow被回调，EGLContext被销毁，渲染的线程停止，无法再恢复，相当于整个组件被废弃。(一般会出现"invalid EGL"字样的日志)
      
-
+* 7） Q:UnstaticLinkedError等一些Native方法找不到的错误。
+  A: SDK只提供了armeabi-v7a和armeabi-v8a两种架构的库，出现这种问题可能是宿主存在armeabi的架构。
