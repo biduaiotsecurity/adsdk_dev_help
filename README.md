@@ -113,6 +113,7 @@ SDK接入前，需提前准备以下参数：
 ）。
 * BDAI_FACE_LICENSE:百度人脸SDK的授权License，需要在人脸SDK后台自行创建
  (https://cloud.baidu.com/product/imagerecognition 目前支持批量授权License)
+* 如果用的是运营商的流量卡，如电信、联通卡等，如果域名需要备案，请联系我们获取最新的域名名单。
 
 以上信息若有疑问，可联系我们获取。
 ### 身份校验（必须）
