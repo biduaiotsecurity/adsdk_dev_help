@@ -25,7 +25,7 @@
 	 * [BDTwoInOneView代码示例](#BDTwoInOneView代码示例)
       * [相关接口介绍](#相关接口介绍)
          * [广告播放回调接口(IAdListener, package com.baidu.adsdk.interfaces)](#广告播放回调接口iadlistener-package-combaiduadsdkinterfaces)
-         * [关于IController](#关于icontroller)
+         * [IController相关接口介绍](#IController相关接口介绍)
             * [请求广告loadAdAsync](#请求广告loadadasync)
             * [设置广告状态回调addAdListener](#设置广告状态回调addadlistener)
             * [移除广告状态回调removeAdListener](#移除广告状态回调removeadlistener)
@@ -712,7 +712,7 @@ public class ManualTwoInOneActivity extends AppCompatActivity {
 * onAdDismissed比如按了home键或者其他activtiy在这个View上面，这个方法就会被回调
 
 
-### 关于IController
+### IController相关接口介绍
 * IController是SDK的核心类，所有相关的业务逻辑都由IController来完成，通过播放组件View的getController方法就可以拿到这个类。以下接口按照常用性排序：
 
 #### 请求广告loadAdAsync
